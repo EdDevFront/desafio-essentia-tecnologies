@@ -1,0 +1,161 @@
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { TaskService } from '../../../core/services/task.service';
+import { Task, TaskPriority } from '../../../core/models/task.model';
+import { TaskCardComponent } from '../task-card/task-card.component';
+import { TaskFormModalComponent } from '../task-form-modal/task-form-modal.component';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+import { FooterComponent } from '../../../shared/components/footer/footer.component';
+
+@Component({
+  selector: 'app-task-dashboard',
+  standalone: true,
+  imports: [CommonModule, FormsModule, TaskCardComponent, TaskFormModalComponent, NavbarComponent, FooterComponent],
+  template: `
+    <div class="min-h-screen flex flex-col bg-[#050505] text-white">
+      <app-navbar></app-navbar>
+
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-white/10 pb-6">
+          <div>
+            <h1 class="text-3xl font-extrabold tracking-tight">Painel de <span class="text-[#FBB03B]">Tarefas</span></h1>
+            <p class="text-sm text-[#b1bbb1] mt-1">Organize suas demandas com alta performance e simplicidade.</p>
+          </div>
+
+          <button 
+            (click)="openCreateModal()" 
+            class="techx-btn-pill px-6 py-3 text-sm font-bold flex items-center space-x-2 shadow-lg shadow-[#DC8016]/20 self-start md:self-auto cursor-pointer">
+            <span>+ Nova Tarefa</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="techx-glass rounded-2xl p-4 border border-white/10">
+            <span class="text-xs text-[#b1bbb1] font-semibold uppercase">Total</span>
+            <p class="text-2xl font-bold mt-1">{{ totalTasks() }}</p>
+          </div>
+          <div class="techx-glass rounded-2xl p-4 border border-white/10">
+            <span class="text-xs text-amber-400 font-semibold uppercase">Pendente</span>
+            <p class="text-2xl font-bold mt-1 text-amber-400">{{ pendingTasks() }}</p>
+          </div>
+          <div class="techx-glass rounded-2xl p-4 border border-white/10">
+            <span class="text-xs text-[#10B981] font-semibold uppercase">Concluído</span>
+            <p class="text-2xl font-bold mt-1 text-[#10B981]">{{ completedTasks() }}</p>
+          </div>
+          <div class="techx-glass rounded-2xl p-4 border border-white/10">
+            <span class="text-xs text-cyan-400 font-semibold uppercase">Taxa</span>
+            <p class="text-2xl font-bold mt-1 text-cyan-400">{{ completionRate() }}%</p>
+          </div>
+        </div>
+
+        <div class="techx-glass rounded-2xl p-4 border border-white/10 flex flex-col md:flex-row gap-4">
+          <input 
+            type="text" 
+            [(ngModel)]="searchQuery" 
+            (ngModelChange)="onFilterChange()"
+            placeholder="Buscar por título ou descrição..." 
+            class="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] text-sm"
+          />
+
+          <div class="flex items-center space-x-2 overflow-x-auto pb-2 md:pb-0">
+            <button 
+              *for="let status of ['ALL', 'false', 'true']" 
+              (click)="setStatusFilter(status)"
+              [class.bg-[#FBB03B]]="statusFilter() === status"
+              [class.text-[#050505]]="statusFilter() === status"
+              [class.bg-white/5]="statusFilter() !== status"
+              class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors border border-white/10 cursor-pointer">
+              {{ getStatusLabel(status) }}
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="taskService.isLoading()" class="py-16 text-center text-[#b1bbb1]">
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#FBB03B] border-t-transparent mb-4"></div>
+          <p>Carregando tarefas...</p>
+        </div>
+
+        <div *ngIf="!taskService.isLoading() && taskService.tasks().length === 0" class="techx-glass rounded-2xl p-12 text-center border border-white/10">
+          <p class="text-lg font-semibold text-slate-300">Nenhuma tarefa encontrada.</p>
+          <p class="text-sm text-[#b1bbb1] mt-2">Clique em "+ Nova Tarefa" para começar a organizar seu dia.</p>
+        </div>
+
+        <div *ngIf="!taskService.isLoading() && taskService.tasks().length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <app-task-card 
+            *ngFor="let task of taskService.tasks()" 
+            [task]="task"
+            (onToggle)="taskService.toggleComplete($event).subscribe()"
+            (onEdit)="openEditModal($event)"
+            (onDelete)="taskService.deleteTask($event).subscribe()">
+          </app-task-card>
+        </div>
+      </main>
+
+      <app-task-form-modal 
+        *ngIf="isModalOpen()" 
+        [taskToEdit]="selectedTask()"
+        (onClose)="closeModal()"
+        (onSave)="onSaveTask($event)">
+      </app-task-form-modal>
+
+      <app-footer></app-footer>
+    </div>
+  `
+})
+export class TaskDashboardComponent implements OnInit {
+  taskService = inject(TaskService);
+
+  searchQuery = '';
+  statusFilter = signal<string>('ALL');
+  isModalOpen = signal<boolean>(false);
+  selectedTask = signal<Task | null>(null);
+
+  totalTasks = computed(() => this.taskService.tasks().length);
+  completedTasks = computed(() => this.taskService.tasks().filter(t => t.isCompleted).length);
+  pendingTasks = computed(() => this.totalTasks() - this.completedTasks());
+  completionRate = computed(() => this.totalTasks() > 0 ? Math.round((this.completedTasks() / this.totalTasks()) * 100) : 0);
+
+  ngOnInit(): void {
+    this.taskService.loadTasks();
+  }
+
+  onFilterChange(): void {
+    this.taskService.loadTasks({ search: this.searchQuery, isCompleted: this.statusFilter() });
+  }
+
+  setStatusFilter(status: string): void {
+    this.statusFilter.set(status);
+    this.onFilterChange();
+  }
+
+  getStatusLabel(status: string): string {
+    if (status === 'ALL') return 'Todas';
+    if (status === 'false') return 'Pendentes';
+    return 'Concluídas';
+  }
+
+  openCreateModal(): void {
+    this.selectedTask.set(null);
+    this.isModalOpen.set(true);
+  }
+
+  openEditModal(task: Task): void {
+    this.selectedTask.set(task);
+    this.isModalOpen.set(true);
+  }
+
+  closeModal(): void {
+    this.isModalOpen.set(false);
+    this.selectedTask.set(null);
+  }
+
+  onSaveTask(payload: any): void {
+    const task = this.selectedTask();
+    if (task) {
+      this.taskService.updateTask(task.id, payload).subscribe(() => this.closeModal());
+    } else {
+      this.taskService.createTask(payload).subscribe(() => this.closeModal());
+    }
+  }
+}
