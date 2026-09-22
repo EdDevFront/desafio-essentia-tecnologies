@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../../core/services/task.service';
-import { Task, TaskPriority } from '../../../core/models/task.model';
+import { Task } from '../../../core/models/task.model';
 import { TaskCardComponent } from '../task-card/task-card.component';
 import { TaskFormModalComponent } from '../task-form-modal/task-form-modal.component';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
@@ -60,11 +60,9 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
 
           <div class="flex items-center space-x-2 overflow-x-auto pb-2 md:pb-0">
             <button 
-              *for="let status of ['ALL', 'false', 'true']" 
+              *ngFor="let status of filterOptions" 
               (click)="setStatusFilter(status)"
-              [class.bg-[#FBB03B]]="statusFilter() === status"
-              [class.text-[#050505]]="statusFilter() === status"
-              [class.bg-white/5]="statusFilter() !== status"
+              [ngClass]="getFilterBtnClass(status)"
               class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors border border-white/10 cursor-pointer">
               {{ getStatusLabel(status) }}
             </button>
@@ -108,6 +106,7 @@ export class TaskDashboardComponent implements OnInit {
 
   searchQuery = '';
   statusFilter = signal<string>('ALL');
+  filterOptions = ['ALL', 'false', 'true'];
   isModalOpen = signal<boolean>(false);
   selectedTask = signal<Task | null>(null);
 
@@ -127,6 +126,12 @@ export class TaskDashboardComponent implements OnInit {
   setStatusFilter(status: string): void {
     this.statusFilter.set(status);
     this.onFilterChange();
+  }
+
+  getFilterBtnClass(status: string): string {
+    return this.statusFilter() === status
+      ? 'bg-[#FBB03B] text-[#050505]'
+      : 'bg-white/5 text-white hover:bg-white/10';
   }
 
   getStatusLabel(status: string): string {
