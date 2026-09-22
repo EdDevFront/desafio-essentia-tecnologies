@@ -1,15 +1,13 @@
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    --bg-dark: #050505;
-    --card-dark: #0d1117;
-    --border-dark: rgba(255, 255, 255, 0.08);
-    --text-muted: #b1bbb1;
-    --accent-orange: #DC8016;
-    --accent-gold: #FBB03B;
-    --accent-emerald: #10B981;
-  }
+:root {
+  --bg-dark: #050505;
+  --card-dark: #0d1117;
+  --border-dark: rgba(255, 255, 255, 0.08);
+  --text-muted: #b1bbb1;
+  --accent-orange: #DC8016;
+  --accent-gold: #FBB03B;
+  --accent-emerald: #10B981;
 }
 
 body {
