@@ -7,11 +7,22 @@ import { TaskCardComponent } from '../task-card/task-card.component';
 import { TaskFormModalComponent } from '../task-form-modal/task-form-modal.component';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
+import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
+import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-task-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, TaskCardComponent, TaskFormModalComponent, NavbarComponent, FooterComponent],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    TaskCardComponent, 
+    TaskFormModalComponent, 
+    NavbarComponent, 
+    FooterComponent,
+    LoadingSkeletonComponent,
+    EmptyStateComponent
+  ],
   template: `
     <div class="min-h-screen flex flex-col bg-[#050505] text-white">
       <app-navbar></app-navbar>
@@ -69,15 +80,16 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
           </div>
         </div>
 
-        <div *ngIf="taskService.isLoading()" class="py-16 text-center text-[#b1bbb1]">
-          <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#FBB03B] border-t-transparent mb-4"></div>
-          <p>Carregando tarefas...</p>
-        </div>
+        <app-loading-skeleton *ngIf="taskService.isLoading()"></app-loading-skeleton>
 
-        <div *ngIf="!taskService.isLoading() && taskService.tasks().length === 0" class="techx-glass rounded-2xl p-12 text-center border border-white/10">
-          <p class="text-lg font-semibold text-slate-300">Nenhuma tarefa encontrada.</p>
-          <p class="text-sm text-[#b1bbb1] mt-2">Clique em "+ Nova Tarefa" para começar a organizar seu dia.</p>
-        </div>
+        <app-empty-state 
+          *ngIf="!taskService.isLoading() && taskService.tasks().length === 0"
+          [icon]="'✨'"
+          [title]="'Nenhuma tarefa por aqui!'"
+          [description]="'Crie sua primeira tarefa para manter sua produtividade em dia.'"
+          [actionLabel]="'+ Criar Tarefa'"
+          (onAction)="openCreateModal()">
+        </app-empty-state>
 
         <div *ngIf="!taskService.isLoading() && taskService.tasks().length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <app-task-card 
