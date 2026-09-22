@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-dark: #050505;
+    --card-dark: #0d1117;
+    --border-dark: rgba(255, 255, 255, 0.08);
+    --text-muted: #b1bbb1;
+    --accent-orange: #DC8016;
+    --accent-gold: #FBB03B;
+    --accent-emerald: #10B981;
+  }
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  background-color: #050505;
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+/* Glassmorphism Card Utilities */
+.techx-glass {
+  background: rgba(13, 17, 23, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.techx-glass-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.techx-glass-hover:hover {
+  background: rgba(22, 27, 34, 0.85);
+  border-color: rgba(251, 176, 59, 0.3);
+  box-shadow: 0 10px 30px -10px rgba(220, 128, 22, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Essentia Pill Button */
+.techx-btn-pill {
+  background: linear-gradient(258deg, #FBB03B 0%, #DC8016 100%);
+  color: #050505;
+  font-weight: 600;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+
+.techx-btn-pill:hover {
+  background: linear-gradient(258deg, #ffca5e 0%, #ea8f25 100%);
+  box-shadow: 0 0 20px rgba(251, 176, 59, 0.4);
+}

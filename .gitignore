@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+dist/
+.angular/
+.nest/
+*.log
+
+# Environment variables
+.env
+.env.local
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.kombai/
+.copilot-specs-cache/
