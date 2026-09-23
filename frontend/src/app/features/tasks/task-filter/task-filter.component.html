@@ -1,0 +1,46 @@
+<div class="techx-glass rounded-2xl p-4 border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+  <div class="flex flex-col sm:flex-row gap-4 flex-1 sm:items-center">
+    <input 
+      type="text" 
+      [(ngModel)]="searchQuery" 
+      (keyup.enter)="applyFilters()"
+      placeholder="Buscar por título ou descrição..." 
+      class="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] text-sm"
+    />
+
+    <div class="flex items-center space-x-3 shrink-0">
+      <span class="text-xs font-semibold uppercase text-[#b1bbb1] mr-1">Status:</span>
+      <label class="inline-flex items-center space-x-1 text-xs font-medium cursor-pointer text-slate-300 hover:text-white">
+        <input type="radio" name="statusFilterRadio" value="ALL" [(ngModel)]="statusFilter" class="accent-[#FBB03B] w-3.5 h-3.5 cursor-pointer" />
+        <span>Todas</span>
+      </label>
+      <label class="inline-flex items-center space-x-1 text-xs font-medium cursor-pointer text-slate-300 hover:text-white">
+        <input type="radio" name="statusFilterRadio" value="false" [(ngModel)]="statusFilter" class="accent-[#FBB03B] w-3.5 h-3.5 cursor-pointer" />
+        <span>Pendentes</span>
+      </label>
+      <label class="inline-flex items-center space-x-1 text-xs font-medium cursor-pointer text-slate-300 hover:text-white">
+        <input type="radio" name="statusFilterRadio" value="true" [(ngModel)]="statusFilter" class="accent-[#FBB03B] w-3.5 h-3.5 cursor-pointer" />
+        <span>Concluídas</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="flex items-center space-x-3 self-end md:self-auto shrink-0">
+    <app-button 
+      *ngIf="isApplied" 
+      variant="outline"
+      (onClick)="clearFilters()">
+      Limpar Filtros
+    </app-button>
+
+    <app-button 
+      variant="primary"
+      size="sm"
+      (onClick)="applyFilters()">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+      <span>Aplicar Filtros</span>
+    </app-button>
+  </div>
+</div>

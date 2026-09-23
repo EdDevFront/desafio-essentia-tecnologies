@@ -1,6 +1,5 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../../core/services/task.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { Task } from '../../../core/models/task.model';
@@ -13,15 +12,15 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { TaskDetailModalComponent } from '../task-detail-modal/task-detail-modal.component';
 import { translateMessage } from '../../../core/interceptors/error.interceptor';
-
 import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { TaskStatsComponent } from '../task-stats/task-stats.component';
+import { TaskFilterComponent, TaskFilterValues } from '../task-filter/task-filter.component';
 
 @Component({
   selector: 'app-task-dashboard',
   standalone: true,
   imports: [
     CommonModule, 
-    FormsModule, 
     TaskCardComponent, 
     TaskFormModalComponent, 
     TaskDetailModalComponent,
@@ -30,20 +29,18 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
     FooterComponent,
     LoadingSkeletonComponent,
     EmptyStateComponent,
-    ButtonComponent
+    ButtonComponent,
+    TaskStatsComponent,
+    TaskFilterComponent
   ],
   templateUrl: './task-dashboard.component.html'
 })
 export class TaskDashboardComponent implements OnInit {
   taskService = inject(TaskService);
   private toastService = inject(ToastService);
-
-  searchQuery = '';
-  statusFilter = 'ALL';
   
-  private lastAppliedFilters: { search?: string; isCompleted?: string } = {};
+  private lastAppliedFilters: TaskFilterValues = {};
 
-  isFilterApplied = signal<boolean>(false);
   isModalOpen = signal<boolean>(false);
   selectedTask = signal<Task | null>(null);
   taskToView = signal<Task | null>(null);
@@ -59,21 +56,13 @@ export class TaskDashboardComponent implements OnInit {
     this.taskService.loadTasks();
   }
 
-  applyFilters(): void {
-    const search = this.searchQuery.trim();
-    const isCompleted = this.statusFilter;
-    const isApplied = search !== '' || isCompleted !== 'ALL';
-
-    this.lastAppliedFilters = { search, isCompleted };
-    this.isFilterApplied.set(isApplied);
+  onFilterTasks(filters: TaskFilterValues): void {
+    this.lastAppliedFilters = filters;
     this.taskService.loadTasks(this.lastAppliedFilters);
   }
 
-  clearFilters(): void {
-    this.searchQuery = '';
-    this.statusFilter = 'ALL';
+  onClearFilters(): void {
     this.lastAppliedFilters = {};
-    this.isFilterApplied.set(false);
     this.taskService.loadTasks();
   }
 
@@ -104,7 +93,7 @@ export class TaskDashboardComponent implements OnInit {
         'Status Atualizado', 
         `A tarefa foi marcada como "${targetStatus}".`
       );
-      this.clearFilters();
+      this.onClearFilters();
     });
   }
 
@@ -122,7 +111,7 @@ export class TaskDashboardComponent implements OnInit {
     this.taskService.deleteTask(task.id).subscribe(() => {
       this.toastService.showSuccess('Tarefa Excluída', 'A tarefa foi removida com sucesso.');
       this.taskToDelete.set(null);
-      this.clearFilters();
+      this.onClearFilters();
     });
   }
 
@@ -134,7 +123,7 @@ export class TaskDashboardComponent implements OnInit {
         next: () => {
           this.toastService.showSuccess('Tarefa Atualizada', 'As alterações foram salvas com sucesso.');
           this.closeModal();
-          this.clearFilters();
+          this.onClearFilters();
         },
         error: (err) => {
           const msg = translateMessage(err?.error?.message);
@@ -146,7 +135,7 @@ export class TaskDashboardComponent implements OnInit {
         next: () => {
           this.toastService.showSuccess('Tarefa Criada', 'A nova tarefa foi adicionada com sucesso.');
           this.closeModal();
-          this.clearFilters();
+          this.onClearFilters();
         },
         error: (err) => {
           const msg = translateMessage(err?.error?.message);
