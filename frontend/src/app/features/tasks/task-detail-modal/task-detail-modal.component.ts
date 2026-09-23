@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { Task } from '../../../core/models/task.model';
 import { PriorityLabelPipe } from '../../../shared/pipes/priority-label.pipe';
 import { PriorityBadgePipe } from '../../../shared/pipes/priority-badge.pipe';
@@ -36,13 +36,10 @@ export class TaskDetailModalComponent {
     if (!this.task.dueDate) {
       return 'Não definida';
     }
-    if (typeof this.task.dueDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(this.task.dueDate)) {
-      const [y, m, d] = this.task.dueDate.split('-');
-      return `${d}/${m}/${y}`;
+    try {
+      return formatDate(this.task.dueDate, 'dd/MM/yyyy', 'en-US');
+    } catch {
+      return 'Não definida';
     }
-    const date = new Date(this.task.dueDate);
-    return isNaN(date.getTime()) 
-      ? 'Não definida' 
-      : date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
   }
 }
