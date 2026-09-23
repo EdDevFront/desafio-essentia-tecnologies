@@ -18,7 +18,7 @@ export class AuthService {
   async register(dto: RegisterDto) {
     const existingUser = await this.userRepository.findOne({ where: { email: dto.email } });
     if (existingUser) {
-      throw new ConflictException('Email already registered');
+      throw new ConflictException('Este e-mail já está cadastrado na plataforma.');
     }
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
@@ -40,7 +40,7 @@ export class AuthService {
   async login(dto: LoginDto) {
     const user = await this.userRepository.findOne({ where: { email: dto.email } });
     if (!user || !(await bcrypt.compare(dto.password, user.password || ''))) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('E-mail ou senha incorretos. Verifique suas credenciais.');
     }
 
     const token = this.generateToken(user.id, user.email);
@@ -53,7 +53,7 @@ export class AuthService {
   async getProfile(userId: string) {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
-      throw new UnauthorizedException('User profile not found');
+      throw new UnauthorizedException('Perfil de usuário não encontrado.');
     }
     delete user.password;
     return user;

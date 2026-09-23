@@ -42,7 +42,7 @@ export class TasksService {
   async findOne(id: string, userId: string): Promise<Task> {
     const task = await this.taskRepository.findOne({ where: { id, userId } });
     if (!task) {
-      throw new NotFoundException(`Task with ID "${id}" not found`);
+      throw new NotFoundException('Tarefa não encontrada.');
     }
     return task;
   }
