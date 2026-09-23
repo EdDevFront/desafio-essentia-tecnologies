@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Task, TaskPriority } from '../../../core/models/task.model';
 import { DatepickerComponent } from '../../../shared/components/datepicker/datepicker.component';
+import { SelectComponent, SelectOption } from '../../../shared/components/select/select.component';
 
 @Component({
   selector: 'app-task-form-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatepickerComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatepickerComponent, SelectComponent],
   template: `
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
       <div class="w-full max-w-lg techx-glass rounded-2xl p-6 border border-white/10 shadow-2xl space-y-5 relative overflow-visible">
@@ -58,14 +59,10 @@ import { DatepickerComponent } from '../../../shared/components/datepicker/datep
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold uppercase tracking-wider text-[#b1bbb1] mb-2">Prioridade *</label>
-              <select 
+              <app-select 
                 formControlName="priority" 
-                class="w-full px-4 py-2.5 rounded-xl bg-[#0d1117] border border-white/10 text-white focus:outline-none focus:border-[#FBB03B]">
-                <option [value]="TaskPriority.LOW">Baixa</option>
-                <option [value]="TaskPriority.MEDIUM">Média</option>
-                <option [value]="TaskPriority.HIGH">Alta</option>
-                <option [value]="TaskPriority.URGENT">Urgente</option>
-              </select>
+                [options]="priorityOptions">
+              </app-select>
               <p *ngIf="taskForm.get('priority')?.touched && taskForm.get('priority')?.invalid" class="text-xs text-red-400 mt-1">
                 A prioridade é obrigatória.
               </p>
@@ -73,12 +70,10 @@ import { DatepickerComponent } from '../../../shared/components/datepicker/datep
 
             <div>
               <label class="block text-xs font-semibold uppercase tracking-wider text-[#b1bbb1] mb-2">Categoria *</label>
-              <select 
+              <app-select 
                 formControlName="categorySelect" 
-                class="w-full px-4 py-2.5 rounded-xl bg-[#0d1117] border border-white/10 text-white focus:outline-none focus:border-[#FBB03B]">
-                <option *ngFor="let cat of presetCategories" [value]="cat">{{ cat }}</option>
-                <option value="Outros">Outros</option>
-              </select>
+                [options]="categoryOptions">
+              </app-select>
             </div>
           </div>
 
@@ -136,6 +131,22 @@ export class TaskFormModalComponent implements OnInit {
     'Design & UX',
     'Suporte & Operações',
     'Reuniões & Gestão'
+  ];
+
+  priorityOptions: SelectOption[] = [
+    { label: 'Baixa', value: TaskPriority.LOW },
+    { label: 'Média', value: TaskPriority.MEDIUM },
+    { label: 'Alta', value: TaskPriority.HIGH },
+    { label: 'Urgente', value: TaskPriority.URGENT }
+  ];
+
+  categoryOptions: SelectOption[] = [
+    { label: 'Desenvolvimento', value: 'Desenvolvimento' },
+    { label: 'Infraestrutura', value: 'Infraestrutura' },
+    { label: 'Design & UX', value: 'Design & UX' },
+    { label: 'Suporte & Operações', value: 'Suporte & Operações' },
+    { label: 'Reuniões & Gestão', value: 'Reuniões & Gestão' },
+    { label: 'Outros', value: 'Outros' }
   ];
 
   taskForm = this.fb.group({
