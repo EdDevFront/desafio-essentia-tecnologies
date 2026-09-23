@@ -37,7 +37,7 @@ interface CalendarDay {
 
       <div 
         *ngIf="isOpen()" 
-        class="absolute left-0 bottom-full mb-2 z-50 w-72 techx-glass rounded-2xl p-4 border border-white/10 shadow-2xl space-y-3 animate-fade-in select-none">
+        class="absolute left-0 bottom-full mb-2 z-50 w-72 bg-[#161b22] rounded-2xl p-4 border border-white/20 shadow-2xl space-y-3 animate-fade-in select-none">
         
         <div class="flex items-center justify-between border-b border-white/10 pb-2">
           <button (click)="prevMonth()" type="button" class="p-1 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white cursor-pointer">
