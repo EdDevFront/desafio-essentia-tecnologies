@@ -17,7 +17,7 @@ body {
   min-height: 100vh;
 }
 
-/* Glassmorphism Card Utilities */
+/* Glassmorphism Card Utility */
 .techx-glass {
   background: rgba(13, 17, 23, 0.75);
   backdrop-filter: blur(16px);
@@ -50,89 +50,23 @@ body {
   box-shadow: 0 0 20px rgba(251, 176, 59, 0.4);
 }
 
-/* Custom Date Picker Styling */
-input[type="date"] {
-  color-scheme: dark;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  border-radius: 6px;
-  padding: 4px;
-  filter: invert(0.85) sepia(100%) hue-rotate(350deg) saturate(400%);
-  transition: all 0.2s ease-in-out;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  filter: invert(1) sepia(100%) hue-rotate(350deg) saturate(800%);
-  transform: scale(1.15);
-}
-
-.techx-date-input {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  transition: all 0.2s ease-in-out;
-}
-
-.techx-date-input:focus {
-  border-color: #FBB03B;
-  box-shadow: 0 0 12px rgba(251, 176, 59, 0.25);
-  outline: none;
-}
-
-/* Custom Select Dropdown Styling */
-select, .techx-select {
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23FBB03B'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1.25rem;
-  padding-right: 2.75rem;
-  background-color: #0d1117;
-  color: #ffffff;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease-in-out;
-}
-
-select:focus, .techx-select:focus {
-  border-color: #FBB03B;
-  box-shadow: 0 0 12px rgba(251, 176, 59, 0.25);
-  outline: none;
-}
-
-select option, .techx-select option {
-  background-color: #161b22;
-  color: #ffffff;
-  padding: 10px;
-}
-
-/* Custom Gold Scrollbar Styling */
+/* Custom Gold Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-
 ::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.03);
-  border-radius: 9999px;
 }
-
 ::-webkit-scrollbar-thumb {
   background: rgba(251, 176, 59, 0.35);
   border-radius: 9999px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(251, 176, 59, 0.8);
 }
 
-/* Firefox Scrollbar Support */
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(251, 176, 59, 0.35) rgba(255, 255, 255, 0.03);
 }
-
-
