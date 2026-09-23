@@ -27,8 +27,10 @@ export class AuthService {
         this.currentUser.set(user);
         this.isLoadingProfile.set(false);
       },
-      error: () => {
-        this.logout();
+      error: (err) => {
+        if (err.status === 401 || err.status === 403) {
+          this.logout();
+        }
         this.isLoadingProfile.set(false);
       }
     });
