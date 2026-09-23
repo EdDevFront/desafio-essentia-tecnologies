@@ -38,12 +38,12 @@ function translateSingleMessage(msg: string): string {
   return msg || 'Ocorreu um erro inesperado na requisição.';
 }
 
-export function translateMessage(rawMessage: any): string {
+export function translateMessage(rawMessage: string | string[] | unknown): string {
   if (!rawMessage) return 'Ocorreu um erro inesperado na requisição.';
   if (Array.isArray(rawMessage)) {
-    return rawMessage.map(msg => translateSingleMessage(msg)).join(', ');
+    return rawMessage.map(msg => translateSingleMessage(String(msg))).join(', ');
   }
-  return translateSingleMessage(rawMessage);
+  return translateSingleMessage(String(rawMessage));
 }
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {

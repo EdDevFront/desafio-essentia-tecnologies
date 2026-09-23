@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
-function setupSwagger(app: any): void {
+function setupSwagger(app: INestApplication): void {
   const config = new DocumentBuilder()
     .setTitle('TechX Task Manager API')
     .setDescription('RESTful API for TechX Task Management System with Auth & Swagger')

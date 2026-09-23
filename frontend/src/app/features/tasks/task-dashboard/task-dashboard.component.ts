@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../../../core/services/task.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { Task } from '../../../core/models/task.model';
+import { Task, CreateTaskPayload } from '../../../core/models/task.model';
 import { TaskCardComponent } from '../task-card/task-card.component';
 import { TaskFormModalComponent } from '../task-form-modal/task-form-modal.component';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
@@ -124,7 +124,7 @@ export class TaskDashboardComponent implements OnInit {
     });
   }
 
-  onSaveTask(payload: any): void {
+  onSaveTask(payload: CreateTaskPayload): void {
     this.modalError.set(null);
     const task = this.selectedTask();
     if (task) {

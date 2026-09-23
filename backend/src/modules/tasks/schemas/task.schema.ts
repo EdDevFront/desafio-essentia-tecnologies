@@ -39,13 +39,14 @@ export class Task {
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
 
-const transformFn = (_doc: any, ret: any) => {
-  ret.id = ret._id ? ret._id.toString() : ret.id;
-  if (ret.userId) {
-    ret.userId = ret.userId.toString();
+const transformFn = (_doc: unknown, ret: Record<string, unknown> | object): void => {
+  const target = ret as Record<string, unknown>;
+  target['id'] = target['_id'] ? (target['_id'] as object).toString() : target['id'];
+  if (target['userId']) {
+    target['userId'] = (target['userId'] as object).toString();
   }
-  delete ret._id;
-  delete ret.__v;
+  delete target['_id'];
+  delete target['__v'];
 };
 
 TaskSchema.set('toJSON', { virtuals: true, transform: transformFn });

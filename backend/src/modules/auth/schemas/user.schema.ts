@@ -19,11 +19,12 @@ export class User {
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-const transformFn = (_doc: any, ret: any) => {
-  ret.id = ret._id ? ret._id.toString() : ret.id;
-  delete ret._id;
-  delete ret.__v;
-  delete ret.password;
+const transformFn = (_doc: unknown, ret: Record<string, unknown> | object): void => {
+  const target = ret as Record<string, unknown>;
+  target['id'] = target['_id'] ? (target['_id'] as object).toString() : target['id'];
+  delete target['_id'];
+  delete target['__v'];
+  delete target['password'];
 };
 
 UserSchema.set('toJSON', { virtuals: true, transform: transformFn });

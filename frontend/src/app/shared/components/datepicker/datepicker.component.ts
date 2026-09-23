@@ -40,8 +40,8 @@ export class DatepickerComponent implements ControlValueAccessor {
     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
   ];
 
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  onChange: (value: string) => void = () => {};
+  onTouched: () => void = () => {};
 
   currentYear = computed(() => this.viewDate().getFullYear());
   currentMonthName = computed(() => this.monthNames[this.viewDate().getMonth()]);
@@ -152,7 +152,7 @@ export class DatepickerComponent implements ControlValueAccessor {
     return 'text-white hover:bg-white/10';
   }
 
-  writeValue(value: any): void {
+  writeValue(value: unknown): void {
     if (value && typeof value === 'string') {
       const iso = value.substring(0, 10);
       this.selectedIsoDate.set(iso);
@@ -165,11 +165,11 @@ export class DatepickerComponent implements ControlValueAccessor {
     }
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: string) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 

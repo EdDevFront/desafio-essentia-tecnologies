@@ -4,7 +4,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export interface SelectOption {
   label: string;
-  value: any;
+  value: unknown;
 }
 
 @Component({
@@ -28,10 +28,10 @@ export class SelectComponent implements ControlValueAccessor {
   @Input() placeholder: string = 'Selecione...';
 
   isOpen = signal(false);
-  selectedValue = signal<any>(null);
+  selectedValue = signal<unknown>(null);
 
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  onChange: (value: unknown) => void = () => {};
+  onTouched: () => void = () => {};
 
   parsedOptions = computed<SelectOption[]>(() => {
     return this.options.map(opt => {
@@ -71,15 +71,15 @@ export class SelectComponent implements ControlValueAccessor {
     this.isOpen.set(false);
   }
 
-  writeValue(value: any): void {
+  writeValue(value: unknown): void {
     this.selectedValue.set(value);
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: unknown) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 

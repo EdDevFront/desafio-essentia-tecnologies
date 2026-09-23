@@ -31,11 +31,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
   private extractMessage(exception: unknown): string {
     const isHttpException = exception instanceof HttpException;
     if (isHttpException) {
-      const res: any = exception.getResponse();
+      const res = exception.getResponse() as Record<string, unknown> | string;
       const isObjectResponse = typeof res === 'object' && res !== null && Boolean(res.message);
       if (isObjectResponse) {
-        const isArrayMessage = Array.isArray(res.message);
-        return isArrayMessage ? res.message.join(', ') : res.message;
+        const messageVal = (res as Record<string, unknown>).message;
+        const isArrayMessage = Array.isArray(messageVal);
+        return isArrayMessage ? messageVal.join(', ') : String(messageVal);
       }
       return exception.message;
     }

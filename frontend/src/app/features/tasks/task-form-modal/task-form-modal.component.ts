@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Task, TaskPriority } from '../../../core/models/task.model';
+import { Task, TaskPriority, CreateTaskPayload } from '../../../core/models/task.model';
 import { DatepickerComponent } from '../../../shared/components/datepicker/datepicker.component';
 import { SelectComponent } from '../../../shared/components/select/select.component';
 import { PRESET_CATEGORIES, PRIORITY_OPTIONS, CATEGORY_OPTIONS } from '../../../core/constants/task.constants';
@@ -29,7 +29,7 @@ export class TaskFormModalComponent implements OnInit {
   @Input() taskToEdit: Task | null = null;
   @Input() errorMessage: string | null = null;
   @Output() onClose = new EventEmitter<void>();
-  @Output() onSave = new EventEmitter<any>();
+  @Output() onSave = new EventEmitter<CreateTaskPayload>();
 
   private fb = inject(FormBuilder);
 
@@ -97,12 +97,14 @@ export class TaskFormModalComponent implements OnInit {
     const { title, description, priority, categorySelect, customCategory, dueDate } = this.taskForm.value;
     const finalCategory = categorySelect === 'Outros' ? customCategory?.trim() : categorySelect;
 
-    this.onSave.emit({
-      title: title?.trim(),
+    const payload: CreateTaskPayload = {
+      title: title?.trim() || '',
       description: description?.trim() || undefined,
-      priority,
-      category: finalCategory,
-      dueDate
-    });
+      priority: (priority as TaskPriority) || TaskPriority.MEDIUM,
+      category: finalCategory || undefined,
+      dueDate: dueDate || undefined
+    };
+
+    this.onSave.emit(payload);
   }
 }
