@@ -109,3 +109,30 @@ select option, .techx-select option {
   padding: 10px;
 }
 
+/* Custom Gold Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(251, 176, 59, 0.35);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(251, 176, 59, 0.8);
+}
+
+/* Firefox Scrollbar Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(251, 176, 59, 0.35) rgba(255, 255, 255, 0.03);
+}
+
+
