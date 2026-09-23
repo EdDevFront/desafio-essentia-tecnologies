@@ -5,6 +5,9 @@ import { CommonModule } from '@angular/common';
   selector: 'app-task-stats',
   standalone: true,
   imports: [CommonModule],
+  host: {
+    class: 'block w-full'
+  },
   templateUrl: './task-stats.component.html'
 })
 export class TaskStatsComponent {

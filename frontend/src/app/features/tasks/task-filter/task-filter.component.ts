@@ -12,6 +12,9 @@ export interface TaskFilterValues {
   selector: 'app-task-filter',
   standalone: true,
   imports: [CommonModule, FormsModule, ButtonComponent],
+  host: {
+    class: 'block w-full'
+  },
   templateUrl: './task-filter.component.html'
 })
 export class TaskFilterComponent {
