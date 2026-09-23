@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
@@ -23,7 +23,7 @@ import { AuthService } from '../../../core/services/auth.service';
         </div>
 
         <div class="flex items-center space-x-4" *ngIf="authService.isAuthenticated(); else guestMenu">
-          <div *ngIf="authService.isLoadingProfile()" class="flex items-center space-x-3 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 animate-pulse">
+          <div *ngIf="authService.isLoadingProfile() || !authService.currentUser()" class="flex items-center space-x-3 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 animate-pulse">
             <div class="w-7 h-7 rounded-full bg-white/20"></div>
             <div class="h-4 w-24 bg-white/20 rounded"></div>
           </div>
@@ -52,9 +52,15 @@ import { AuthService } from '../../../core/services/auth.service';
     </header>
   `
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   authService = inject(AuthService);
   private router = inject(Router);
+
+  ngOnInit(): void {
+    if (this.authService.token() && !this.authService.currentUser() && !this.authService.isLoadingProfile()) {
+      this.authService.fetchProfile();
+    }
+  }
 
   getInitials(name?: string): string {
     if (!name) return 'U';
