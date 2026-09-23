@@ -29,8 +29,8 @@
 
     <span 
       class="px-2.5 py-1 text-xs font-bold rounded-full border uppercase tracking-wider shrink-0"
-      [ngClass]="getPriorityBadgeClass(task.priority)">
-      {{ getPriorityLabel(task.priority) }}
+      [ngClass]="task.priority | priorityBadgeClass">
+      {{ task.priority | priorityLabel }}
     </span>
   </div>
 

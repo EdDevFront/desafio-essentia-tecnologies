@@ -9,11 +9,11 @@
     <div class="flex items-start justify-between border-b border-white/10 pb-4">
       <div class="space-y-2 flex-1 pr-4">
         <div class="flex items-center space-x-2.5">
-          <span 
-            class="px-2.5 py-0.5 text-[11px] font-bold rounded-full border uppercase tracking-wider"
-            [ngClass]="getPriorityBadgeClass(task.priority)">
-            {{ getPriorityLabel(task.priority) }}
-          </span>
+            <span 
+              class="px-2.5 py-0.5 text-[11px] font-bold rounded-full border uppercase tracking-wider"
+              [ngClass]="task.priority | priorityBadgeClass">
+              {{ task.priority | priorityLabel }}
+            </span>
           <span 
             class="px-2.5 py-0.5 text-[11px] font-bold rounded-full border uppercase tracking-wider"
             [ngClass]="task.isCompleted ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-amber-500/10 text-amber-400 border-amber-500/30'">

@@ -29,9 +29,10 @@
           placeholder="Ex: Implementar testes unitários"
           class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
         />
-        <p *ngIf="taskForm.get('title')?.touched && taskForm.get('title')?.invalid" class="text-xs text-red-400 mt-1">
-          O título da tarefa é obrigatório.
-        </p>
+        <app-form-error 
+          [show]="!!(taskForm.get('title')?.touched && taskForm.get('title')?.invalid)" 
+          message="O título da tarefa é obrigatório.">
+        </app-form-error>
       </div>
 
       <div>
@@ -51,9 +52,10 @@
             formControlName="priority" 
             [options]="priorityOptions">
           </app-select>
-          <p *ngIf="taskForm.get('priority')?.touched && taskForm.get('priority')?.invalid" class="text-xs text-red-400 mt-1">
-            A prioridade é obrigatória.
-          </p>
+          <app-form-error 
+            [show]="!!(taskForm.get('priority')?.touched && taskForm.get('priority')?.invalid)" 
+            message="A prioridade é obrigatória.">
+          </app-form-error>
         </div>
 
         <div>
@@ -73,17 +75,19 @@
           placeholder="Ex: Mobile"
           class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B]"
         />
-        <p *ngIf="taskForm.get('customCategory')?.touched && isCustomCategoryInvalid()" class="text-xs text-red-400 mt-1">
-          Informe o nome da categoria.
-        </p>
+        <app-form-error 
+          [show]="!!(taskForm.get('customCategory')?.touched && isCustomCategoryInvalid())" 
+          message="Informe o nome da categoria.">
+        </app-form-error>
       </div>
 
       <div>
         <label class="block text-xs font-semibold uppercase tracking-wider text-[#b1bbb1] mb-2">Data de Entrega *</label>
         <app-datepicker formControlName="dueDate" placeholder="dd/mm/aaaa"></app-datepicker>
-        <p *ngIf="taskForm.get('dueDate')?.touched && taskForm.get('dueDate')?.invalid" class="text-xs text-red-400 mt-1">
-          A data de entrega é obrigatória.
-        </p>
+        <app-form-error 
+          [show]="!!(taskForm.get('dueDate')?.touched && taskForm.get('dueDate')?.invalid)" 
+          message="A data de entrega é obrigatória.">
+        </app-form-error>
       </div>
 
       <div class="flex items-center justify-end space-x-3 pt-3 border-t border-white/10">

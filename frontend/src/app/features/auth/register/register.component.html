@@ -19,9 +19,10 @@
             placeholder="Ex: Edmilson Motta"
             class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
           />
-          <p *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid" class="text-xs text-red-400 mt-1">
-            O nome completo é obrigatório.
-          </p>
+          <app-form-error 
+            [show]="!!(registerForm.get('name')?.touched && registerForm.get('name')?.invalid)" 
+            message="O nome completo é obrigatório.">
+          </app-form-error>
         </div>
 
         <div>
@@ -32,9 +33,10 @@
             placeholder="seu.email@techx.com"
             class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
           />
-          <p *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid" class="text-xs text-red-400 mt-1">
-            Informe um e-mail válido.
-          </p>
+          <app-form-error 
+            [show]="!!(registerForm.get('email')?.touched && registerForm.get('email')?.invalid)" 
+            message="Informe um e-mail válido.">
+          </app-form-error>
         </div>
 
         <div>
@@ -45,9 +47,10 @@
             placeholder="Mínimo 6 caracteres"
             class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
           />
-          <p *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" class="text-xs text-red-400 mt-1">
-            A senha deve ter no mínimo 6 caracteres.
-          </p>
+          <app-form-error 
+            [show]="!!(registerForm.get('password')?.touched && registerForm.get('password')?.invalid)" 
+            message="A senha deve ter no mínimo 6 caracteres.">
+          </app-form-error>
         </div>
 
         <button 

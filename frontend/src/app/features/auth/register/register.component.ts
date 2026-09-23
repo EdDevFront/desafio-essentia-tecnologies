@@ -7,10 +7,12 @@ import { ToastService } from '../../../core/services/toast.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
 
+import { FormErrorComponent } from '../../../shared/components/form-error/form-error.component';
+
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, NavbarComponent, FooterComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, NavbarComponent, FooterComponent, FormErrorComponent],
   templateUrl: './register.component.html'
 })
 export class RegisterComponent {

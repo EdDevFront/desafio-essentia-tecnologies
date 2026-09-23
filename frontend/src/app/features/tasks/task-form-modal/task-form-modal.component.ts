@@ -3,12 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Task, TaskPriority } from '../../../core/models/task.model';
 import { DatepickerComponent } from '../../../shared/components/datepicker/datepicker.component';
-import { SelectComponent, SelectOption } from '../../../shared/components/select/select.component';
+import { SelectComponent } from '../../../shared/components/select/select.component';
+import { PRESET_CATEGORIES, PRIORITY_OPTIONS, CATEGORY_OPTIONS } from '../../../core/constants/task.constants';
+
+import { FormErrorComponent } from '../../../shared/components/form-error/form-error.component';
 
 @Component({
   selector: 'app-task-form-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatepickerComponent, SelectComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatepickerComponent, SelectComponent, FormErrorComponent],
   templateUrl: './task-form-modal.component.html'
 })
 export class TaskFormModalComponent implements OnInit {
@@ -18,31 +21,10 @@ export class TaskFormModalComponent implements OnInit {
   @Output() onSave = new EventEmitter<any>();
 
   private fb = inject(FormBuilder);
-  TaskPriority = TaskPriority;
 
-  presetCategories = [
-    'Desenvolvimento',
-    'Infraestrutura',
-    'Design & UX',
-    'Suporte & Operações',
-    'Reuniões & Gestão'
-  ];
-
-  priorityOptions: SelectOption[] = [
-    { label: 'Baixa', value: TaskPriority.LOW },
-    { label: 'Média', value: TaskPriority.MEDIUM },
-    { label: 'Alta', value: TaskPriority.HIGH },
-    { label: 'Urgente', value: TaskPriority.URGENT }
-  ];
-
-  categoryOptions: SelectOption[] = [
-    { label: 'Desenvolvimento', value: 'Desenvolvimento' },
-    { label: 'Infraestrutura', value: 'Infraestrutura' },
-    { label: 'Design & UX', value: 'Design & UX' },
-    { label: 'Suporte & Operações', value: 'Suporte & Operações' },
-    { label: 'Reuniões & Gestão', value: 'Reuniões & Gestão' },
-    { label: 'Outros', value: 'Outros' }
-  ];
+  presetCategories = PRESET_CATEGORIES;
+  priorityOptions = PRIORITY_OPTIONS;
+  categoryOptions = CATEGORY_OPTIONS;
 
   taskForm = this.fb.group({
     title: ['', [Validators.required]],
