@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Task, TaskDocument } from './schemas/task.schema';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -12,6 +12,12 @@ export class TasksService {
     @InjectModel(Task.name)
     private readonly taskModel: Model<TaskDocument>,
   ) {}
+
+  private validateObjectId(id: string): void {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new NotFoundException('Tarefa não encontrada.');
+    }
+  }
 
   async findAll(userId: string, filters: TaskFilterDto): Promise<any[]> {
     const filterQuery: any = { userId };
@@ -41,12 +47,8 @@ export class TasksService {
   }
 
   async findOne(id: string, userId: string): Promise<any> {
-    let task: TaskDocument | null = null;
-    try {
-      task = await this.taskModel.findOne({ _id: id, userId }).exec();
-    } catch {
-      // Invalid ObjectId format
-    }
+    this.validateObjectId(id);
+    const task = await this.taskModel.findOne({ _id: id, userId }).exec();
     if (!task) {
       throw new NotFoundException('Tarefa não encontrada.');
     }
@@ -63,16 +65,12 @@ export class TasksService {
   }
 
   async update(id: string, updateTaskDto: UpdateTaskDto, userId: string): Promise<any> {
-    let updated: TaskDocument | null = null;
-    try {
-      updated = await this.taskModel.findOneAndUpdate(
-        { _id: id, userId },
-        { $set: updateTaskDto },
-        { new: true }
-      ).exec();
-    } catch {
-      // Invalid ObjectId format
-    }
+    this.validateObjectId(id);
+    const updated = await this.taskModel.findOneAndUpdate(
+      { _id: id, userId },
+      { $set: updateTaskDto },
+      { new: true }
+    ).exec();
     if (!updated) {
       throw new NotFoundException('Tarefa não encontrada.');
     }
@@ -80,12 +78,8 @@ export class TasksService {
   }
 
   async toggleComplete(id: string, userId: string): Promise<any> {
-    let task: TaskDocument | null = null;
-    try {
-      task = await this.taskModel.findOne({ _id: id, userId }).exec();
-    } catch {
-      // Invalid ObjectId format
-    }
+    this.validateObjectId(id);
+    const task = await this.taskModel.findOne({ _id: id, userId }).exec();
     if (!task) {
       throw new NotFoundException('Tarefa não encontrada.');
     }
@@ -95,12 +89,8 @@ export class TasksService {
   }
 
   async remove(id: string, userId: string): Promise<void> {
-    let deleted: TaskDocument | null = null;
-    try {
-      deleted = await this.taskModel.findOneAndDelete({ _id: id, userId }).exec();
-    } catch {
-      // Invalid ObjectId format
-    }
+    this.validateObjectId(id);
+    const deleted = await this.taskModel.findOneAndDelete({ _id: id, userId }).exec();
     if (!deleted) {
       throw new NotFoundException('Tarefa não encontrada.');
     }
