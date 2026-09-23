@@ -1,31 +1,31 @@
-<div class="techx-glass rounded-2xl p-4 border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-  <div class="flex flex-col sm:flex-row gap-4 flex-1 sm:items-center">
+<div class="techx-glass rounded-2xl p-4 border border-white/10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+  <div class="flex flex-col sm:flex-row gap-4 flex-1 sm:items-center flex-wrap">
     <input 
       type="text" 
       [(ngModel)]="searchQuery" 
       (keyup.enter)="applyFilters()"
       placeholder="Buscar por título ou descrição..." 
-      class="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] text-sm"
+      class="w-full sm:w-auto flex-1 min-w-[200px] px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] text-sm"
     />
 
-    <div class="flex items-center space-x-3 shrink-0">
+    <div class="flex items-center space-x-3 shrink-0 flex-wrap gap-y-2">
       <span class="text-xs font-semibold uppercase text-[#b1bbb1] mr-1">Status:</span>
-      <label class="inline-flex items-center space-x-1 text-xs font-medium cursor-pointer text-slate-300 hover:text-white">
+      <label class="inline-flex items-center space-x-1.5 text-xs font-medium cursor-pointer text-slate-300 hover:text-white">
         <input type="radio" name="statusFilterRadio" value="ALL" [(ngModel)]="statusFilter" class="accent-[#FBB03B] w-3.5 h-3.5 cursor-pointer" />
         <span>Todas</span>
       </label>
-      <label class="inline-flex items-center space-x-1 text-xs font-medium cursor-pointer text-slate-300 hover:text-white">
+      <label class="inline-flex items-center space-x-1.5 text-xs font-medium cursor-pointer text-slate-300 hover:text-white">
         <input type="radio" name="statusFilterRadio" value="false" [(ngModel)]="statusFilter" class="accent-[#FBB03B] w-3.5 h-3.5 cursor-pointer" />
         <span>Pendentes</span>
       </label>
-      <label class="inline-flex items-center space-x-1 text-xs font-medium cursor-pointer text-slate-300 hover:text-white">
+      <label class="inline-flex items-center space-x-1.5 text-xs font-medium cursor-pointer text-slate-300 hover:text-white">
         <input type="radio" name="statusFilterRadio" value="true" [(ngModel)]="statusFilter" class="accent-[#FBB03B] w-3.5 h-3.5 cursor-pointer" />
         <span>Concluídas</span>
       </label>
     </div>
   </div>
 
-  <div class="flex items-center space-x-3 self-end md:self-auto shrink-0">
+  <div class="flex items-center space-x-3 self-end lg:self-auto shrink-0">
     <app-button 
       *ngIf="isApplied" 
       variant="outline"

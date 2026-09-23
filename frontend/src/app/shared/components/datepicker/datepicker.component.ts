@@ -15,6 +15,9 @@ interface CalendarDay {
   selector: 'app-datepicker',
   standalone: true,
   imports: [CommonModule],
+  host: {
+    class: 'block w-full'
+  },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

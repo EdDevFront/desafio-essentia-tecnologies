@@ -11,6 +11,9 @@ export interface SelectOption {
   selector: 'app-select',
   standalone: true,
   imports: [CommonModule],
+  host: {
+    class: 'block w-full'
+  },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

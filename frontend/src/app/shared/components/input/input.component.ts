@@ -8,6 +8,9 @@ import { FormErrorComponent } from '../form-error/form-error.component';
   standalone: true,
   imports: [CommonModule, FormErrorComponent],
   templateUrl: './input.component.html',
+  host: {
+    class: 'block w-full'
+  },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

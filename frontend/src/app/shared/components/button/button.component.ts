@@ -8,6 +8,9 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
   selector: 'app-button',
   standalone: true,
   imports: [CommonModule],
+  host: {
+    '[class]': 'hostClasses'
+  },
   templateUrl: './button.component.html'
 })
 export class ButtonComponent {
@@ -20,6 +23,10 @@ export class ButtonComponent {
   @Input() customClass: string = '';
 
   @Output() onClick = new EventEmitter<MouseEvent>();
+
+  get hostClasses(): string {
+    return this.customClass.includes('w-full') ? 'block w-full' : 'inline-block';
+  }
 
   handleClick(event: MouseEvent): void {
     if (!this.disabled && !this.loading) {
