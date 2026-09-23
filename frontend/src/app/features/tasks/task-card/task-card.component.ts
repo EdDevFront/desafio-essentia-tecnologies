@@ -9,77 +9,7 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
   host: {
     class: 'h-full block'
   },
-  template: `
-    <div 
-      (click)="onView.emit(task)"
-      class="techx-glass techx-glass-hover rounded-2xl p-5 border border-white/10 flex flex-col justify-between space-y-4 group h-full cursor-pointer select-none">
-      
-      <div class="flex items-start justify-between space-x-3">
-        <div class="flex items-start space-x-3 flex-1">
-          <button 
-            (click)="$event.stopPropagation(); onToggle.emit(task.id)"
-            class="mt-1 h-6 w-6 rounded-lg border flex items-center justify-center transition-all cursor-pointer shrink-0"
-            [ngClass]="task.isCompleted ? 'bg-[#10B981] border-[#10B981] text-[#050505]' : 'border-white/20 hover:border-[#FBB03B] bg-white/5'">
-            <svg *ngIf="task.isCompleted" class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-            </svg>
-          </button>
-
-          <div class="flex-1 min-h-[3.75rem] flex flex-col justify-start">
-            <h3 
-              class="text-base font-semibold tracking-tight transition-colors line-clamp-1"
-              [ngClass]="task.isCompleted ? 'line-through text-[#b1bbb1]' : 'text-white group-hover:text-[#FBB03B]'">
-              {{ task.title }}
-            </h3>
-            <p 
-              class="text-sm mt-1 line-clamp-2"
-              [ngClass]="task.description ? 'text-[#b1bbb1]' : 'text-white/30 italic'">
-              {{ task.description || 'Sem descrição' }}
-            </p>
-          </div>
-        </div>
-
-        <span 
-          class="px-2.5 py-1 text-xs font-bold rounded-full border uppercase tracking-wider shrink-0"
-          [ngClass]="getPriorityBadgeClass(task.priority)">
-          {{ getPriorityLabel(task.priority) }}
-        </span>
-      </div>
-
-      <div class="pt-3 border-t border-white/5 flex items-center justify-between text-xs text-[#b1bbb1]">
-        <div class="flex items-center space-x-2">
-          <span *ngIf="task.category" class="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-slate-300">
-            {{ task.category }}
-          </span>
-          <span *ngIf="task.dueDate" class="flex items-center space-x-1">
-            <svg class="w-3.5 h-3.5 inline text-[#FBB03B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-            <span>{{ task.dueDate | date:'dd/MM/yyyy' }}</span>
-          </span>
-        </div>
-
-        <div class="flex items-center space-x-2 opacity-80 group-hover:opacity-100 transition-opacity">
-          <button 
-            (click)="$event.stopPropagation(); onEdit.emit(task)"
-            class="p-1.5 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white transition-colors cursor-pointer"
-            title="Editar Tarefa">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-            </svg>
-          </button>
-          <button 
-            (click)="$event.stopPropagation(); onDelete.emit(task.id)"
-            class="p-1.5 rounded-lg hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors cursor-pointer"
-            title="Excluir Tarefa">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  `
+  templateUrl: './task-card.component.html'
 })
 export class TaskCardComponent {
   @Input({ required: true }) task!: Task;

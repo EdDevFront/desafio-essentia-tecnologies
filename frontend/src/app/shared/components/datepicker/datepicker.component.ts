@@ -22,70 +22,7 @@ interface CalendarDay {
       multi: true
     }
   ],
-  template: `
-    <div class="relative w-full">
-      <div 
-        (click)="toggleOpen()" 
-        class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white flex items-center justify-between cursor-pointer hover:border-[#FBB03B]/50 transition-colors select-none">
-        <span [ngClass]="formattedDisplay() ? 'text-white' : 'text-white/40'">
-          {{ formattedDisplay() || placeholder }}
-        </span>
-        <svg class="w-4 h-4 text-[#FBB03B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-        </svg>
-      </div>
-
-      <div 
-        *ngIf="isOpen()" 
-        class="absolute left-0 bottom-full mb-2 z-50 w-72 bg-[#161b22] rounded-2xl p-4 border border-white/20 shadow-2xl space-y-3 animate-fade-in select-none">
-        
-        <div class="flex items-center justify-between border-b border-white/10 pb-2">
-          <button (click)="prevMonth()" type="button" class="p-1 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white cursor-pointer">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
-          </button>
-
-          <span class="text-xs font-bold text-white capitalize tracking-wide">
-            {{ currentMonthName() }} {{ currentYear() }}
-          </span>
-
-          <button (click)="nextMonth()" type="button" class="p-1 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white cursor-pointer">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-            </svg>
-          </button>
-        </div>
-
-        <div class="grid grid-cols-7 gap-1 text-center">
-          <span *ngFor="let day of weekDays" class="text-[10px] font-bold text-[#b1bbb1] uppercase">
-            {{ day }}
-          </span>
-        </div>
-
-        <div class="grid grid-cols-7 gap-1">
-          <button 
-            *ngFor="let item of calendarDays()" 
-            (click)="selectDate(item)"
-            type="button"
-            [disabled]="!item.isCurrentMonth"
-            [ngClass]="getDayClass(item)"
-            class="h-8 w-8 text-xs rounded-xl flex items-center justify-center transition-all cursor-pointer">
-            {{ item.dayNumber }}
-          </button>
-        </div>
-
-        <div class="flex items-center justify-between pt-2 border-t border-white/10 text-xs font-semibold">
-          <button (click)="selectToday()" type="button" class="text-[#FBB03B] hover:underline cursor-pointer">
-            Hoje
-          </button>
-          <button (click)="clearDate()" type="button" class="text-slate-400 hover:text-white cursor-pointer">
-            Limpar
-          </button>
-        </div>
-      </div>
-    </div>
-  `
+  templateUrl: './datepicker.component.html'
 })
 export class DatepickerComponent implements ControlValueAccessor {
   @Input() placeholder: string = 'dd/mm/aaaa';

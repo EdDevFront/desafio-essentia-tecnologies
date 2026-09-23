@@ -6,10 +6,7 @@ import { ToastContainerComponent } from './shared/components/toast-container/toa
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, ToastContainerComponent],
-  template: `
-    <app-toast-container></app-toast-container>
-    <router-outlet></router-outlet>
-  `
+  templateUrl: './app.component.html'
 })
 export class AppComponent {
   title = 'TechX Task Manager';
