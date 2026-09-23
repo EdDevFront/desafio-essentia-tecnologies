@@ -4,6 +4,7 @@ dist/
 .angular/
 .nest/
 *.log
+*.sqlite
 
 # Environment variables
 .env
