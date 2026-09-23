@@ -36,7 +36,7 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
         <span 
           class="px-2.5 py-1 text-xs font-bold rounded-full border uppercase tracking-wider"
           [ngClass]="getPriorityBadgeClass(task.priority)">
-          {{ task.priority }}
+          {{ getPriorityLabel(task.priority) }}
         </span>
       </div>
 
@@ -80,6 +80,21 @@ export class TaskCardComponent {
   @Output() onToggle = new EventEmitter<string>();
   @Output() onEdit = new EventEmitter<Task>();
   @Output() onDelete = new EventEmitter<string>();
+
+  getPriorityLabel(priority: TaskPriority): string {
+    switch (priority) {
+      case TaskPriority.URGENT:
+        return 'Urgente';
+      case TaskPriority.HIGH:
+        return 'Alta';
+      case TaskPriority.MEDIUM:
+        return 'Média';
+      case TaskPriority.LOW:
+        return 'Baixa';
+      default:
+        return priority || 'Média';
+    }
+  }
 
   getPriorityBadgeClass(priority: TaskPriority): string {
     switch (priority) {
