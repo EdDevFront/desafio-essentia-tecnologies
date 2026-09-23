@@ -62,22 +62,44 @@ import { translateMessage } from '../../../core/interceptors/error.interceptor';
           </div>
         </div>
 
-        <div class="techx-glass rounded-2xl p-4 border border-white/10 flex flex-col md:flex-row gap-4">
-          <input 
-            type="text" 
-            [(ngModel)]="searchQuery" 
-            (ngModelChange)="onFilterChange()"
-            placeholder="Buscar por título ou descrição..." 
-            class="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] text-sm"
-          />
+        <div class="techx-glass rounded-2xl p-4 border border-white/10 flex flex-col lg:flex-row gap-4 lg:items-center justify-between">
+          <div class="flex flex-col sm:flex-row gap-3 flex-1">
+            <input 
+              type="text" 
+              [(ngModel)]="searchQuery" 
+              (keyup.enter)="applyFilters()"
+              placeholder="Buscar por título ou descrição..." 
+              class="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] text-sm"
+            />
 
-          <div class="flex items-center space-x-2 overflow-x-auto pb-2 md:pb-0">
+            <div class="flex items-center space-x-2">
+              <button 
+                *ngFor="let status of filterOptions" 
+                (click)="setStatusFilter(status)"
+                [ngClass]="getFilterBtnClass(status)"
+                class="px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors border border-white/10 cursor-pointer">
+                {{ getStatusLabel(status) }}
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-2 self-end lg:self-auto">
             <button 
-              *ngFor="let status of filterOptions" 
-              (click)="setStatusFilter(status)"
-              [ngClass]="getFilterBtnClass(status)"
-              class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors border border-white/10 cursor-pointer">
-              {{ getStatusLabel(status) }}
+              (click)="applyFilters()"
+              class="techx-btn-pill px-5 py-2.5 text-xs font-bold flex items-center space-x-1.5 shadow-md shadow-[#DC8016]/20 cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              <span>Aplicar Filtros</span>
+            </button>
+
+            <button 
+              (click)="clearFilters()"
+              class="px-4 py-2.5 rounded-full text-xs font-semibold border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer flex items-center space-x-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              <span>Limpar Filtros</span>
             </button>
           </div>
         </div>
@@ -135,13 +157,19 @@ export class TaskDashboardComponent implements OnInit {
     this.taskService.loadTasks();
   }
 
-  onFilterChange(): void {
+  applyFilters(): void {
     this.taskService.loadTasks({ search: this.searchQuery, isCompleted: this.statusFilter() });
+  }
+
+  clearFilters(): void {
+    this.searchQuery = '';
+    this.statusFilter.set('ALL');
+    this.applyFilters();
   }
 
   setStatusFilter(status: string): void {
     this.statusFilter.set(status);
-    this.onFilterChange();
+    this.applyFilters();
   }
 
   getFilterBtnClass(status: string): string {
