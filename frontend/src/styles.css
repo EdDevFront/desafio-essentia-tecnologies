@@ -49,3 +49,34 @@ body {
   background: linear-gradient(258deg, #ffca5e 0%, #ea8f25 100%);
   box-shadow: 0 0 20px rgba(251, 176, 59, 0.4);
 }
+
+/* Custom Date Picker Styling */
+input[type="date"] {
+  color-scheme: dark;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 4px;
+  filter: invert(0.85) sepia(100%) hue-rotate(350deg) saturate(400%);
+  transition: all 0.2s ease-in-out;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  filter: invert(1) sepia(100%) hue-rotate(350deg) saturate(800%);
+  transform: scale(1.15);
+}
+
+.techx-date-input {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  transition: all 0.2s ease-in-out;
+}
+
+.techx-date-input:focus {
+  border-color: #FBB03B;
+  box-shadow: 0 0 12px rgba(251, 176, 59, 0.25);
+  outline: none;
+}

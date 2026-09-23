@@ -99,7 +99,7 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
             <input 
               type="date" 
               formControlName="dueDate" 
-              class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-[#FBB03B]"
+              class="w-full px-4 py-2.5 rounded-xl techx-date-input text-white"
             />
             <p *ngIf="taskForm.get('dueDate')?.touched && taskForm.get('dueDate')?.invalid" class="text-xs text-red-400 mt-1">
               A data de entrega é obrigatória.
