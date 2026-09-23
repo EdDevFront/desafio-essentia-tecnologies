@@ -38,6 +38,10 @@ export class TaskCardComponent {
       : 'text-white/30 italic';
   }
 
+  get descriptionLabel(): string {
+    return this.task.description || 'Sem descrição';
+  }
+
   handleToggle(event: Event): void {
     event.stopPropagation();
     this.onToggle.emit(this.task.id);

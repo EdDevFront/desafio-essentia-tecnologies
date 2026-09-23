@@ -27,4 +27,22 @@ export class TaskDetailModalComponent {
       ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' 
       : 'bg-amber-500/10 text-amber-400 border-amber-500/30';
   }
+
+  get categoryLabel(): string {
+    return this.task.category || 'Geral';
+  }
+
+  get dueDateLabel(): string {
+    if (!this.task.dueDate) {
+      return 'Não definida';
+    }
+    if (typeof this.task.dueDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(this.task.dueDate)) {
+      const [y, m, d] = this.task.dueDate.split('-');
+      return `${d}/${m}/${y}`;
+    }
+    const date = new Date(this.task.dueDate);
+    return isNaN(date.getTime()) 
+      ? 'Não definida' 
+      : date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+  }
 }
