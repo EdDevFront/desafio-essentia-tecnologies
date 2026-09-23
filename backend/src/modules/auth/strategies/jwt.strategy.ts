@@ -19,10 +19,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: { sub: string; email: string }) {
-    const user = await this.userModel.findById(payload.sub);
-    if (!user) {
+    try {
+      const user = await this.userModel.findById(payload.sub);
+      if (!user) {
+        throw new UnauthorizedException('Sessão inválida ou expirada. Faça login novamente.');
+      }
+      return user.toJSON();
+    } catch {
       throw new UnauthorizedException('Sessão inválida ou expirada. Faça login novamente.');
     }
-    return user.toJSON();
   }
 }

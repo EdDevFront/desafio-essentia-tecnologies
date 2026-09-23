@@ -29,10 +29,11 @@ export class AuthService {
     });
 
     const savedUser = await createdUser.save();
-    const token = this.generateToken(savedUser.id, savedUser.email);
+    const userId = savedUser._id.toString();
+    const token = this.generateToken(userId, savedUser.email);
 
     return {
-      user: { id: savedUser.id, name: savedUser.name, email: savedUser.email },
+      user: { id: userId, name: savedUser.name, email: savedUser.email },
       accessToken: token,
     };
   }
@@ -43,9 +44,10 @@ export class AuthService {
       throw new UnauthorizedException('E-mail ou senha incorretos. Verifique suas credenciais.');
     }
 
-    const token = this.generateToken(user.id, user.email);
+    const userId = user._id.toString();
+    const token = this.generateToken(userId, user.email);
     return {
-      user: { id: user.id, name: user.name, email: user.email },
+      user: { id: userId, name: user.name, email: user.email },
       accessToken: token,
     };
   }
