@@ -10,6 +10,7 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar.compon
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
 import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { translateMessage } from '../../../core/interceptors/error.interceptor';
 
 @Component({
@@ -20,6 +21,7 @@ import { translateMessage } from '../../../core/interceptors/error.interceptor';
     FormsModule, 
     TaskCardComponent, 
     TaskFormModalComponent, 
+    ConfirmModalComponent,
     NavbarComponent, 
     FooterComponent,
     LoadingSkeletonComponent,
@@ -124,7 +126,7 @@ import { translateMessage } from '../../../core/interceptors/error.interceptor';
             [task]="task"
             (onToggle)="onToggleTask($event)"
             (onEdit)="openEditModal($event)"
-            (onDelete)="onDeleteTask($event)">
+            (onDelete)="promptDeleteTask($event)">
           </app-task-card>
         </div>
       </main>
@@ -136,6 +138,14 @@ import { translateMessage } from '../../../core/interceptors/error.interceptor';
         (onClose)="closeModal()"
         (onSave)="onSaveTask($event)">
       </app-task-form-modal>
+
+      <app-confirm-modal
+        *ngIf="taskToDelete()"
+        [title]="'Excluir Tarefa'"
+        [message]="'Tem certeza que deseja excluir a tarefa &quot;' + taskToDelete()?.title + '&quot;? Esta ação não pode ser desfeita.'"
+        (onConfirm)="confirmDeleteTask()"
+        (onCancel)="taskToDelete.set(null)">
+      </app-confirm-modal>
 
       <app-footer></app-footer>
     </div>
@@ -153,6 +163,7 @@ export class TaskDashboardComponent implements OnInit {
   isFilterApplied = signal<boolean>(false);
   isModalOpen = signal<boolean>(false);
   selectedTask = signal<Task | null>(null);
+  taskToDelete = signal<Task | null>(null);
   modalError = signal<string | null>(null);
 
   totalTasks = computed(() => this.taskService.tasks().length);
@@ -180,10 +191,6 @@ export class TaskDashboardComponent implements OnInit {
     this.lastAppliedFilters = {};
     this.isFilterApplied.set(false);
     this.taskService.loadTasks();
-  }
-
-  refreshCurrentList(): void {
-    this.taskService.loadTasks(this.lastAppliedFilters);
   }
 
   openCreateModal(): void {
@@ -217,9 +224,20 @@ export class TaskDashboardComponent implements OnInit {
     });
   }
 
-  onDeleteTask(id: string): void {
-    this.taskService.deleteTask(id).subscribe(() => {
+  promptDeleteTask(id: string): void {
+    const task = this.taskService.tasks().find(t => t.id === id);
+    if (task) {
+      this.taskToDelete.set(task);
+    }
+  }
+
+  confirmDeleteTask(): void {
+    const task = this.taskToDelete();
+    if (!task) return;
+
+    this.taskService.deleteTask(task.id).subscribe(() => {
       this.toastService.showSuccess('Tarefa Excluída', 'A tarefa foi removida com sucesso.');
+      this.taskToDelete.set(null);
       this.clearFilters();
     });
   }
