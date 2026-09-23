@@ -5,7 +5,6 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { GetUser } from './decorators/get-user.decorator';
-import { User } from './entities/user.entity';
 
 @ApiTags('Auth')
 @Controller('api/auth')
@@ -27,11 +26,19 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user profile information' })
+  getProfileInfo(@GetUser('id') userId: string) {
+    return this.authService.getProfile(userId);
+  }
+
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current user profile' })
-  getProfile(@GetUser() user: User) {
-    return user;
+  getProfile(@GetUser('id') userId: string) {
+    return this.authService.getProfile(userId);
   }
 }

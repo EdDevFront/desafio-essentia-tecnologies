@@ -50,6 +50,15 @@ export class AuthService {
     };
   }
 
+  async getProfile(userId: string) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new UnauthorizedException('User profile not found');
+    }
+    delete user.password;
+    return user;
+  }
+
   private generateToken(userId: string, email: string): string {
     return this.jwtService.sign({ sub: userId, email });
   }

@@ -22,7 +22,7 @@ export class AuthService {
 
   fetchProfile(): void {
     this.isLoadingProfile.set(true);
-    this.http.get<User>(`${this.apiUrl}/me`).subscribe({
+    this.http.get<User>(`${this.apiUrl}/profile`).subscribe({
       next: (user) => {
         this.currentUser.set(user);
         this.isLoadingProfile.set(false);
