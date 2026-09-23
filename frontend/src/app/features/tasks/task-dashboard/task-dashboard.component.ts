@@ -72,7 +72,7 @@ import { translateMessage } from '../../../core/interceptors/error.interceptor';
               class="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] text-sm"
             />
 
-            <div class="flex items-center space-x-3 bg-white/5 px-4 py-2 rounded-xl border border-white/10 shrink-0">
+            <div class="flex items-center space-x-3 shrink-0">
               <span class="text-xs font-semibold uppercase text-[#b1bbb1] mr-1">Status:</span>
               <label class="inline-flex items-center space-x-1 text-xs font-medium cursor-pointer text-slate-300 hover:text-white">
                 <input type="radio" name="statusFilterRadio" value="ALL" [(ngModel)]="statusFilter" class="accent-[#FBB03B] w-3.5 h-3.5 cursor-pointer" />
