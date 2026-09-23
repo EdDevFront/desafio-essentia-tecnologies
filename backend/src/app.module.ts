@@ -7,7 +7,10 @@ import { TasksModule } from './modules/tasks/tasks.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env', 'backend/.env'],
+    }),
     MongooseModule.forRootAsync({
       useFactory: getDatabaseConfig,
     }),
