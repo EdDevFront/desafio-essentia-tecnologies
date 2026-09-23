@@ -1,5 +1,5 @@
 <app-modal 
-  [title]="taskToEdit ? 'Editar Tarefa' : 'Nova Tarefa'" 
+  [title]="modalTitle" 
   maxWidth="lg" 
   (onClose)="onClose.emit()">
 
@@ -52,7 +52,7 @@
       </div>
     </div>
 
-    <div *ngIf="taskForm.get('categorySelect')?.value === 'Outros'">
+    <div *ngIf="isCustomCategorySelected">
       <app-input
         label="Digite a Categoria"
         [showRequiredMarker]="true"
@@ -78,7 +78,7 @@
       </app-button>
 
       <app-button type="submit" variant="primary">
-        {{ taskToEdit ? 'Salvar Alterações' : 'Criar Tarefa' }}
+        {{ submitButtonLabel }}
       </app-button>
     </div>
   </form>

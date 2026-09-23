@@ -19,4 +19,22 @@ export class TaskCardComponent {
   @Output() onToggle = new EventEmitter<string>();
   @Output() onEdit = new EventEmitter<Task>();
   @Output() onDelete = new EventEmitter<string>();
+
+  get toggleButtonClass(): string {
+    return this.task.isCompleted 
+      ? 'bg-[#10B981] border-[#10B981] text-[#050505]' 
+      : 'border-white/20 hover:border-[#FBB03B] bg-white/5';
+  }
+
+  get titleClass(): string {
+    return this.task.isCompleted 
+      ? 'line-through text-[#b1bbb1]' 
+      : 'text-white group-hover:text-[#FBB03B]';
+  }
+
+  get descriptionClass(): string {
+    return this.task.description 
+      ? 'text-[#b1bbb1]' 
+      : 'text-white/30 italic';
+  }
 }

@@ -7,8 +7,8 @@
     </span>
     <span 
       class="px-2.5 py-0.5 text-[11px] font-bold rounded-full border uppercase tracking-wider"
-      [ngClass]="task.isCompleted ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-amber-500/10 text-amber-400 border-amber-500/30'">
-      {{ task.isCompleted ? 'Concluída' : 'Pendente' }}
+      [ngClass]="statusBadgeClass">
+      {{ statusLabel }}
     </span>
   </div>
 

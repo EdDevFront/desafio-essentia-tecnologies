@@ -46,6 +46,18 @@ export class TaskFormModalComponent implements OnInit {
     dueDate: ['', [Validators.required]]
   });
 
+  get modalTitle(): string {
+    return this.taskToEdit ? 'Editar Tarefa' : 'Nova Tarefa';
+  }
+
+  get submitButtonLabel(): string {
+    return this.taskToEdit ? 'Salvar Alterações' : 'Criar Tarefa';
+  }
+
+  get isCustomCategorySelected(): boolean {
+    return this.taskForm.get('categorySelect')?.value === 'Outros';
+  }
+
   ngOnInit(): void {
     if (this.taskToEdit) {
       const cat = this.taskToEdit.category || 'Desenvolvimento';

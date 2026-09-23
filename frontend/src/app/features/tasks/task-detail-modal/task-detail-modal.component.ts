@@ -17,4 +17,14 @@ export class TaskDetailModalComponent {
   @Output() onClose = new EventEmitter<void>();
   @Output() onEdit = new EventEmitter<Task>();
   @Output() onDelete = new EventEmitter<string>();
+
+  get statusLabel(): string {
+    return this.task.isCompleted ? 'Concluída' : 'Pendente';
+  }
+
+  get statusBadgeClass(): string {
+    return this.task.isCompleted 
+      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' 
+      : 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+  }
 }

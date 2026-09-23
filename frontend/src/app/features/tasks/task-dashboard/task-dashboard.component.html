@@ -60,8 +60,8 @@
 
   <app-confirm-modal
     *ngIf="taskToDelete()"
-    [title]="'Excluir Tarefa'"
-    [message]="'Tem certeza que deseja excluir a tarefa &quot;' + taskToDelete()?.title + '&quot;? Esta ação não pode ser desfeita.'"
+    title="Excluir Tarefa"
+    [message]="deleteConfirmMessage()"
     (onConfirm)="confirmDeleteTask()"
     (onCancel)="taskToDelete.set(null)">
   </app-confirm-modal>

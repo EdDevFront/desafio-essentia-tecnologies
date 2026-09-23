@@ -56,6 +56,11 @@ export class TaskDashboardComponent implements OnInit {
   hasNoTasks = computed(() => !this.taskService.isLoading() && this.totalTasks() === 0);
   hasTasks = computed(() => !this.taskService.isLoading() && this.totalTasks() > 0);
 
+  deleteConfirmMessage = computed(() => {
+    const task = this.taskToDelete();
+    return task ? `Tem certeza que deseja excluir a tarefa "${task.title}"? Esta ação não pode ser desfeita.` : '';
+  });
+
   ngOnInit(): void {
     this.taskService.loadTasks();
   }

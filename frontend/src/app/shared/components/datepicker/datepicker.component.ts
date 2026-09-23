@@ -51,6 +51,9 @@ export class DatepickerComponent implements ControlValueAccessor {
     return `${parts[2]}/${parts[1]}/${parts[0]}`;
   });
 
+  displayText = computed(() => this.formattedDisplay() || this.placeholder);
+  displayLabelClass = computed(() => this.formattedDisplay() ? 'text-white' : 'text-white/40');
+
   calendarDays = computed(() => {
     const view = this.viewDate();
     const year = view.getFullYear();

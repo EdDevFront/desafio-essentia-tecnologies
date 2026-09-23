@@ -44,8 +44,17 @@ export class SelectComponent implements ControlValueAccessor {
     return this.parsedOptions().find(o => o.value === val) || null;
   });
 
+  displayText = computed(() => this.selectedOption()?.label || this.placeholder);
+  labelClass = computed(() => this.selectedOption() ? 'text-white' : 'text-white/40');
+
   isSelected(opt: SelectOption): boolean {
     return this.selectedValue() === opt.value;
+  }
+
+  getOptionClass(opt: SelectOption): string {
+    return this.isSelected(opt) 
+      ? 'bg-[#FBB03B]/15 text-[#FBB03B] font-semibold' 
+      : 'text-slate-200 hover:bg-white/10 hover:text-white';
   }
 
   toggleOpen(): void {
