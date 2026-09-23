@@ -7,8 +7,8 @@ dist/
 *.sqlite
 
 # Environment variables
-.env.local
-!backend/.env
+.env
+.env.*
 
 # IDE & OS
 .vscode/

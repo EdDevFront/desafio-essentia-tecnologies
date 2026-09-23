@@ -6,13 +6,13 @@ Aplicação web fullstack de gerenciamento de tarefas desenvolvida para a **Tech
 
 ---
 
-## 📌 Integração MongoDB Atlas & Instruções de Avaliação
+## 📌 Variáveis de Ambiente (.env) & Instruções de Avaliação
 
 > [!IMPORTANT]
-> **Banco de Dados na Nuvem Integrado (MongoDB Atlas)**:
-> O banco de dados da aplicação foi integrado com o **MongoDB Atlas**. Para permitir que os avaliadores do processo seletivo testem a aplicação **imediatamente sem qualquer complicação ou configuração extra de banco local**, o arquivo `backend/.env` contendo as credenciais de conexão do cluster foi **temporariamente mantido no repositório Git**.
+> **Credenciais de Acesso (.env)**:
+> As variáveis de ambiente com as credenciais do banco de dados na nuvem (**MongoDB Atlas**) e chaves da aplicação foram **enviadas diretamente para a recrutadora** do processo seletivo.
 > 
-> *Nota de Segurança:* Assim que o resultado do processo seletivo for concluído, este cluster e a credencial do `.env` serão permanentemente excluídos/revogados.
+> Para rodar o backend localmente, crie o arquivo `backend/.env` inserindo as variáveis enviadas (ou utilizando a estrutura presente em `backend/.env.example`).
 
 ---
 
@@ -47,17 +47,27 @@ npm run start
 
 ---
 
-## 🎨 Design System & Identidade Visual (TechX)
-A interface do usuário foi inspirada no ecossistema visual de **Essentia Technologies**, trazendo uma experiência moderna e consistente:
-- **Tema:** Dark Mode ultra-clean (`#050505` / `#161b22`).
-- **Gradients & Accents:** Tons dourados/âmbar (`#FBB03B` / `#DC8016`) com toques em verde esmeralda (`#10B981`).
-- **Favicon Personalizado:** Ícone "X" em degradê dourado idêntico à logo da aplicação no navegador.
-- **Componentes Customizados:**
-  - `SelectComponent`: Dropdown de seleção personalizado com scrollbar dourada e suporte a ControlValueAccessor.
-  - `DatepickerComponent`: Seletor de datas com fundo 100% sólido e navegação por calendário.
-  - `TaskDetailModalComponent`: Modal de visualização detalhada ao clicar em qualquer cartão de tarefa.
-  - `ConfirmModalComponent`: Modal de confirmação para exclusão de tarefas.
-  - Cartões de tarefa com alinhamento e dimensões perfeitamente uniformes.
+## 📂 Estrutura & Organização do Monorepo
+
+O projeto está organizado em um monorepo modular, separando com clareza a aplicação **Backend** (NestJS 10) e **Frontend** (Angular 19), seguindo os princípios de Domain-Driven Design (DDD), Clean Architecture e DRY (Don't Repeat Yourself):
+
+```text
+desafio-essentia-tecnologies/
+├── backend/                  # Aplicação Backend (NestJS 10 API RESTful)
+│   ├── src/
+│   │   ├── core/             # Banco de Dados (Mongoose), Guards (JWT), Interceptors e Estratégias
+│   │   └── modules/
+│   │       ├── auth/         # Domínio de Autenticação (Controller, Service, Schema User, DTOs)
+│   │       └── tasks/        # Domínio de Tarefas (Controller, Service, Schema Task, DTOs)
+│   └── test/                 # Testes Automatizados (E2E e Unitários)
+│
+└── frontend/                 # Aplicação Frontend (Angular 19 - Standalone Components)
+    └── src/
+        └── app/
+            ├── core/         # Serviços Globais (Auth, Task, Toast), Interceptors, Guards e Models
+            ├── features/     # Módulos de Funcionalidades (Login, Register, Task Dashboard, Modais)
+            └── shared/       # Componentes de UI Reutilizáveis (Button, Input, Select, Datepicker, Modal, Pipes)
+```
 
 ---
 
