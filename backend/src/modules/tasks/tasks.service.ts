@@ -14,7 +14,8 @@ export class TasksService {
   ) {}
 
   private validateObjectId(id: string): void {
-    if (!Types.ObjectId.isValid(id)) {
+    const isInvalidIdFormat = !Types.ObjectId.isValid(id);
+    if (isInvalidIdFormat) {
       throw new NotFoundException('Tarefa não encontrada.');
     }
   }
@@ -22,23 +23,27 @@ export class TasksService {
   async findAll(userId: string, filters: TaskFilterDto): Promise<any[]> {
     const filterQuery: any = { userId };
 
-    if (filters.search) {
-      const regex = new RegExp(filters.search, 'i');
+    const hasSearchTerm = Boolean(filters.search);
+    if (hasSearchTerm) {
+      const regex = new RegExp(filters.search!, 'i');
       filterQuery.$or = [
         { title: regex },
         { description: regex },
       ];
     }
 
-    if (filters.isCompleted !== undefined) {
+    const hasCompletedFilter = filters.isCompleted !== undefined;
+    if (hasCompletedFilter) {
       filterQuery.isCompleted = filters.isCompleted === 'true';
     }
 
-    if (filters.priority) {
+    const hasPriorityFilter = Boolean(filters.priority);
+    if (hasPriorityFilter) {
       filterQuery.priority = filters.priority;
     }
 
-    if (filters.category) {
+    const hasCategoryFilter = Boolean(filters.category);
+    if (hasCategoryFilter) {
       filterQuery.category = filters.category;
     }
 
@@ -49,7 +54,9 @@ export class TasksService {
   async findOne(id: string, userId: string): Promise<any> {
     this.validateObjectId(id);
     const task = await this.taskModel.findOne({ _id: id, userId }).exec();
-    if (!task) {
+    const isTaskNotFound = !task;
+
+    if (isTaskNotFound) {
       throw new NotFoundException('Tarefa não encontrada.');
     }
     return task.toJSON();
@@ -71,7 +78,9 @@ export class TasksService {
       { $set: updateTaskDto },
       { new: true }
     ).exec();
-    if (!updated) {
+    const isTaskNotFound = !updated;
+
+    if (isTaskNotFound) {
       throw new NotFoundException('Tarefa não encontrada.');
     }
     return updated.toJSON();
@@ -80,7 +89,9 @@ export class TasksService {
   async toggleComplete(id: string, userId: string): Promise<any> {
     this.validateObjectId(id);
     const task = await this.taskModel.findOne({ _id: id, userId }).exec();
-    if (!task) {
+    const isTaskNotFound = !task;
+
+    if (isTaskNotFound) {
       throw new NotFoundException('Tarefa não encontrada.');
     }
     task.isCompleted = !task.isCompleted;
@@ -91,7 +102,9 @@ export class TasksService {
   async remove(id: string, userId: string): Promise<void> {
     this.validateObjectId(id);
     const deleted = await this.taskModel.findOneAndDelete({ _id: id, userId }).exec();
-    if (!deleted) {
+    const isTaskNotFound = !deleted;
+
+    if (isTaskNotFound) {
       throw new NotFoundException('Tarefa não encontrada.');
     }
   }

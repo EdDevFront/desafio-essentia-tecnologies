@@ -10,7 +10,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const status = exception instanceof HttpException 
+    const isHttpException = exception instanceof HttpException;
+    const status = isHttpException 
       ? exception.getStatus() 
       : HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -21,17 +22,20 @@ export class AllExceptionsFilter implements ExceptionFilter {
     response.status(status).json({
       statusCode: status,
       message,
-      error: exception instanceof HttpException ? exception.name : 'InternalServerError',
+      error: isHttpException ? exception.name : 'InternalServerError',
       timestamp: new Date().toISOString(),
       path: request.url,
     });
   }
 
   private extractMessage(exception: unknown): string {
-    if (exception instanceof HttpException) {
+    const isHttpException = exception instanceof HttpException;
+    if (isHttpException) {
       const res: any = exception.getResponse();
-      if (typeof res === 'object' && res?.message) {
-        return Array.isArray(res.message) ? res.message.join(', ') : res.message;
+      const isObjectResponse = typeof res === 'object' && res !== null && Boolean(res.message);
+      if (isObjectResponse) {
+        const isArrayMessage = Array.isArray(res.message);
+        return isArrayMessage ? res.message.join(', ') : res.message;
       }
       return exception.message;
     }

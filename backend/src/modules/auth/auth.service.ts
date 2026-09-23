@@ -16,15 +16,18 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto) {
-    const existingUser = await this.userModel.findOne({ email: dto.email.toLowerCase() });
-    if (existingUser) {
+    const normalizedEmail = dto.email.toLowerCase();
+    const existingUser = await this.userModel.findOne({ email: normalizedEmail });
+    const isEmailAlreadyRegistered = Boolean(existingUser);
+
+    if (isEmailAlreadyRegistered) {
       throw new ConflictException('Este e-mail já está cadastrado na plataforma.');
     }
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
     const createdUser = new this.userModel({
       name: dto.name,
-      email: dto.email.toLowerCase(),
+      email: normalizedEmail,
       password: hashedPassword,
     });
 
@@ -39,22 +42,29 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const user = await this.userModel.findOne({ email: dto.email.toLowerCase() });
-    if (!user || !(await bcrypt.compare(dto.password, user.password || ''))) {
+    const normalizedEmail = dto.email.toLowerCase();
+    const user = await this.userModel.findOne({ email: normalizedEmail });
+    const isUserNotFound = !user;
+    const isPasswordValid = user ? await bcrypt.compare(dto.password, user.password || '') : false;
+    const isInvalidCredentials = isUserNotFound || !isPasswordValid;
+
+    if (isInvalidCredentials) {
       throw new UnauthorizedException('E-mail ou senha incorretos. Verifique suas credenciais.');
     }
 
-    const userId = user._id.toString();
-    const token = this.generateToken(userId, user.email);
+    const userId = user!._id.toString();
+    const token = this.generateToken(userId, user!.email);
     return {
-      user: { id: userId, name: user.name, email: user.email },
+      user: { id: userId, name: user!.name, email: user!.email },
       accessToken: token,
     };
   }
 
   async getProfile(userId: string) {
     const user = await this.userModel.findById(userId);
-    if (!user) {
+    const isUserMissing = !user;
+
+    if (isUserMissing) {
       throw new UnauthorizedException('Perfil de usuário não encontrado.');
     }
     return user.toJSON();
