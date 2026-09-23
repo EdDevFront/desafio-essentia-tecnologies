@@ -16,7 +16,7 @@
       [showRequiredMarker]="true"
       formControlName="title"
       placeholder="Ex: Implementar testes unitários"
-      [showError]="!!(taskForm.get('title')?.touched && taskForm.get('title')?.invalid)"
+      [showError]="isFieldError('title')"
       errorMessage="O título da tarefa é obrigatório.">
     </app-input>
 
@@ -38,7 +38,7 @@
           [options]="priorityOptions">
         </app-select>
         <app-form-error 
-          [show]="!!(taskForm.get('priority')?.touched && taskForm.get('priority')?.invalid)" 
+          [show]="isFieldError('priority')" 
           message="A prioridade é obrigatória.">
         </app-form-error>
       </div>
@@ -58,7 +58,7 @@
         [showRequiredMarker]="true"
         formControlName="customCategory"
         placeholder="Ex: Mobile"
-        [showError]="!!(taskForm.get('customCategory')?.touched && isCustomCategoryInvalid())"
+        [showError]="isCustomCategoryError()"
         errorMessage="Informe o nome da categoria.">
       </app-input>
     </div>
@@ -67,7 +67,7 @@
       <label class="block text-xs font-semibold uppercase tracking-wider text-[#b1bbb1] mb-2">Data de Entrega *</label>
       <app-datepicker formControlName="dueDate" placeholder="dd/mm/aaaa"></app-datepicker>
       <app-form-error 
-        [show]="!!(taskForm.get('dueDate')?.touched && taskForm.get('dueDate')?.invalid)" 
+        [show]="isFieldError('dueDate')" 
         message="A data de entrega é obrigatória.">
       </app-form-error>
     </div>

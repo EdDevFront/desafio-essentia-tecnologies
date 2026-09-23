@@ -28,17 +28,17 @@
       (onClear)="onClearFilters()">
     </app-task-filter>
 
-    <app-loading-skeleton *ngIf="taskService.isLoading()"></app-loading-skeleton>
+    <app-loading-skeleton *ngIf="isLoading()"></app-loading-skeleton>
 
     <app-empty-state 
-      *ngIf="!taskService.isLoading() && taskService.tasks().length === 0"
+      *ngIf="hasNoTasks()"
       [title]="'Nenhuma tarefa por aqui!'"
       [description]="'Crie sua primeira tarefa para manter sua produtividade em dia.'"
       [actionLabel]="'+ Criar Tarefa'"
       (onAction)="openCreateModal()">
     </app-empty-state>
 
-    <div *ngIf="!taskService.isLoading() && taskService.tasks().length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+    <div *ngIf="hasTasks()" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
       <app-task-card 
         *ngFor="let task of taskService.tasks()" 
         [task]="task"

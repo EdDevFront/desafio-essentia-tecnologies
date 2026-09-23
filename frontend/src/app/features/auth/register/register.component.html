@@ -16,7 +16,7 @@
           type="text"
           formControlName="name"
           placeholder="Ex: Edmilson Motta"
-          [showError]="!!(registerForm.get('name')?.touched && registerForm.get('name')?.invalid)"
+          [showError]="isFieldError('name')"
           errorMessage="O nome completo é obrigatório.">
         </app-input>
 
@@ -25,7 +25,7 @@
           type="email"
           formControlName="email"
           placeholder="seu.email@techx.com"
-          [showError]="!!(registerForm.get('email')?.touched && registerForm.get('email')?.invalid)"
+          [showError]="isFieldError('email')"
           errorMessage="Informe um e-mail válido.">
         </app-input>
 
@@ -34,7 +34,7 @@
           type="password"
           formControlName="password"
           placeholder="Mínimo 6 caracteres"
-          [showError]="!!(registerForm.get('password')?.touched && registerForm.get('password')?.invalid)"
+          [showError]="isFieldError('password')"
           errorMessage="A senha deve ter no mínimo 6 caracteres.">
         </app-input>
 

@@ -61,10 +61,20 @@ export class TaskFormModalComponent implements OnInit {
     }
   }
 
+  isFieldError(field: string): boolean {
+    const control = this.taskForm.get(field);
+    return !!(control && control.touched && control.invalid);
+  }
+
   isCustomCategoryInvalid(): boolean {
     const sel = this.taskForm.get('categorySelect')?.value;
     const custom = this.taskForm.get('customCategory')?.value;
     return sel === 'Outros' && (!custom || custom.trim() === '');
+  }
+
+  isCustomCategoryError(): boolean {
+    const control = this.taskForm.get('customCategory');
+    return !!(control && control.touched && this.isCustomCategoryInvalid());
   }
 
   onSubmit(): void {

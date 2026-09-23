@@ -36,6 +36,11 @@ export class LoginComponent {
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
+  isFieldError(field: string): boolean {
+    const control = this.loginForm.get(field);
+    return !!(control && control.touched && control.invalid);
+  }
+
   onSubmit(): void {
     if (this.loginForm.invalid) return;
     this.isLoading.set(true);

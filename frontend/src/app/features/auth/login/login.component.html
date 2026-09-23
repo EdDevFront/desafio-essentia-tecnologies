@@ -16,7 +16,7 @@
           type="email"
           formControlName="email"
           placeholder="seu.email@techx.com"
-          [showError]="!!(loginForm.get('email')?.touched && loginForm.get('email')?.invalid)"
+          [showError]="isFieldError('email')"
           errorMessage="E-mail inválido.">
         </app-input>
 
@@ -25,7 +25,7 @@
           type="password"
           formControlName="password"
           placeholder="••••••••"
-          [showError]="!!(loginForm.get('password')?.touched && loginForm.get('password')?.invalid)"
+          [showError]="isFieldError('password')"
           errorMessage="A senha é obrigatória.">
         </app-input>
 

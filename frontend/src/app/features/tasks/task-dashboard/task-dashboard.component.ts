@@ -52,6 +52,10 @@ export class TaskDashboardComponent implements OnInit {
   pendingTasks = computed(() => this.totalTasks() - this.completedTasks());
   completionRate = computed(() => this.totalTasks() > 0 ? Math.round((this.completedTasks() / this.totalTasks()) * 100) : 0);
 
+  isLoading = computed(() => this.taskService.isLoading());
+  hasNoTasks = computed(() => !this.taskService.isLoading() && this.totalTasks() === 0);
+  hasTasks = computed(() => !this.taskService.isLoading() && this.totalTasks() > 0);
+
   ngOnInit(): void {
     this.taskService.loadTasks();
   }

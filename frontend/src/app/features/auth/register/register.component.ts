@@ -37,6 +37,11 @@ export class RegisterComponent {
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
+  isFieldError(field: string): boolean {
+    const control = this.registerForm.get(field);
+    return !!(control && control.touched && control.invalid);
+  }
+
   onSubmit(): void {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
@@ -10,8 +10,14 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './navbar.component.html'
 })
 export class NavbarComponent implements OnInit {
-  authService = inject(AuthService);
+  private authService = inject(AuthService);
   private router = inject(Router);
+
+  isAuthenticated = computed(() => this.authService.isAuthenticated());
+  isLoadingProfile = computed(() => this.authService.isLoadingProfile() || !this.authService.currentUser());
+  isProfileLoaded = computed(() => !this.authService.isLoadingProfile() && !!this.authService.currentUser());
+  currentUser = computed(() => this.authService.currentUser());
+  userInitials = computed(() => this.getInitials(this.currentUser()?.name));
 
   ngOnInit(): void {
     if (this.authService.token() && !this.authService.currentUser() && !this.authService.isLoadingProfile()) {
