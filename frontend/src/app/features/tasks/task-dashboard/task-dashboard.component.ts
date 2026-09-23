@@ -120,7 +120,7 @@ import { translateMessage } from '../../../core/interceptors/error.interceptor';
           (onAction)="openCreateModal()">
         </app-empty-state>
 
-        <div *ngIf="!taskService.isLoading() && taskService.tasks().length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngIf="!taskService.isLoading() && taskService.tasks().length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
           <app-task-card 
             *ngFor="let task of taskService.tasks()" 
             [task]="task"

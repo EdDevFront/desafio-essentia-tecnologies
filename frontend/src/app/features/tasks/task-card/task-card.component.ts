@@ -6,35 +6,40 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
   selector: 'app-task-card',
   standalone: true,
   imports: [CommonModule],
+  host: {
+    class: 'h-full block'
+  },
   template: `
     <div 
-      class="techx-glass techx-glass-hover rounded-2xl p-5 border border-white/10 flex flex-col justify-between space-y-4 group">
+      class="techx-glass techx-glass-hover rounded-2xl p-5 border border-white/10 flex flex-col justify-between space-y-4 group h-full">
       
       <div class="flex items-start justify-between space-x-3">
         <div class="flex items-start space-x-3 flex-1">
           <button 
             (click)="onToggle.emit(task.id)"
-            class="mt-1 h-6 w-6 rounded-lg border flex items-center justify-center transition-all cursor-pointer"
+            class="mt-1 h-6 w-6 rounded-lg border flex items-center justify-center transition-all cursor-pointer shrink-0"
             [ngClass]="task.isCompleted ? 'bg-[#10B981] border-[#10B981] text-[#050505]' : 'border-white/20 hover:border-[#FBB03B] bg-white/5'">
             <svg *ngIf="task.isCompleted" class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
             </svg>
           </button>
 
-          <div class="flex-1">
+          <div class="flex-1 min-h-[3.75rem] flex flex-col justify-start">
             <h3 
-              class="text-base font-semibold tracking-tight transition-colors"
+              class="text-base font-semibold tracking-tight transition-colors line-clamp-1"
               [ngClass]="task.isCompleted ? 'line-through text-[#b1bbb1]' : 'text-white group-hover:text-[#FBB03B]'">
               {{ task.title }}
             </h3>
-            <p *ngIf="task.description" class="text-sm text-[#b1bbb1] mt-1 line-clamp-2">
-              {{ task.description }}
+            <p 
+              class="text-sm mt-1 line-clamp-2"
+              [ngClass]="task.description ? 'text-[#b1bbb1]' : 'text-white/30 italic'">
+              {{ task.description || 'Sem descrição' }}
             </p>
           </div>
         </div>
 
         <span 
-          class="px-2.5 py-1 text-xs font-bold rounded-full border uppercase tracking-wider"
+          class="px-2.5 py-1 text-xs font-bold rounded-full border uppercase tracking-wider shrink-0"
           [ngClass]="getPriorityBadgeClass(task.priority)">
           {{ getPriorityLabel(task.priority) }}
         </span>
