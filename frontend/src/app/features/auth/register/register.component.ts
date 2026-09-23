@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
 
@@ -21,10 +22,6 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
           <div class="text-center mb-8">
             <h1 class="text-2xl font-bold tracking-tight">Criar uma Nova Conta</h1>
             <p class="text-sm text-[#b1bbb1] mt-2">Cadastre-se para acessar o gerenciador de tarefas TechX</p>
-          </div>
-
-          <div *ngIf="errorMessage()" class="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
-            {{ errorMessage() }}
           </div>
 
           <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
@@ -81,10 +78,10 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
 export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private toastService = inject(ToastService);
   private router = inject(Router);
 
   isLoading = signal(false);
-  errorMessage = signal<string | null>(null);
 
   registerForm = this.fb.group({
     name: ['', [Validators.required]],
@@ -95,17 +92,16 @@ export class RegisterComponent {
   onSubmit(): void {
     if (this.registerForm.invalid) return;
     this.isLoading.set(true);
-    this.errorMessage.set(null);
 
     const { name, email, password } = this.registerForm.value;
     this.authService.register({ name: name!, email: email!, password: password! }).subscribe({
       next: () => {
         this.isLoading.set(false);
+        this.toastService.showSuccess('Conta criada!', 'Seu cadastro foi realizado com sucesso.');
         this.router.navigate(['/dashboard']);
       },
-      error: (err) => {
+      error: () => {
         this.isLoading.set(false);
-        this.errorMessage.set(err.error?.message || 'Falha ao registrar conta.');
       }
     });
   }

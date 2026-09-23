@@ -7,10 +7,10 @@ import { ToastService, ToastMessage } from '../../../core/services/toast.service
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="fixed top-5 right-5 z-50 flex flex-col space-y-3 max-w-sm w-full pointer-events-none">
+    <div class="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center space-y-3 max-w-md w-full px-4 pointer-events-none">
       <div 
         *ngFor="let toast of toastService.toasts()" 
-        class="pointer-events-auto techx-glass rounded-xl p-4 border shadow-2xl flex items-start space-x-3 transition-all transform duration-300"
+        class="pointer-events-auto techx-glass rounded-xl p-4 border shadow-2xl flex items-start space-x-3 transition-all transform duration-300 w-full"
         [ngClass]="getToastBorderClass(toast.type)">
         
         <div class="text-xl">

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
 
@@ -21,10 +22,6 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
           <div class="text-center mb-8">
             <h1 class="text-2xl font-bold tracking-tight">Acessar a Plataforma</h1>
             <p class="text-sm text-[#b1bbb1] mt-2">Entre com suas credenciais para gerenciar suas tarefas TechX</p>
-          </div>
-
-          <div *ngIf="errorMessage()" class="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
-            {{ errorMessage() }}
           </div>
 
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
@@ -57,7 +54,7 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
             <button 
               type="submit" 
               [disabled]="loginForm.invalid || isLoading()"
-              class="w-full techx-btn-pill py-3 text.base font-bold shadow-lg shadow-[#DC8016]/20 disabled:opacity-50 cursor-pointer">
+              class="w-full techx-btn-pill py-3 text-base font-bold shadow-lg shadow-[#DC8016]/20 disabled:opacity-50 cursor-pointer">
               <span *ngIf="!isLoading()">Entrar na Conta</span>
               <span *ngIf="isLoading()">Carregando...</span>
             </button>
@@ -77,10 +74,10 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private toastService = inject(ToastService);
   private router = inject(Router);
 
   isLoading = signal(false);
-  errorMessage = signal<string | null>(null);
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -90,17 +87,16 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.invalid) return;
     this.isLoading.set(true);
-    this.errorMessage.set(null);
 
     const { email, password } = this.loginForm.value;
     this.authService.login({ email: email!, password: password! }).subscribe({
       next: () => {
         this.isLoading.set(false);
+        this.toastService.showSuccess('Bem-vindo!', 'Login realizado com sucesso.');
         this.router.navigate(['/dashboard']);
       },
-      error: (err) => {
+      error: () => {
         this.isLoading.set(false);
-        this.errorMessage.set(err.error?.message || 'Falha ao realizar login.');
       }
     });
   }

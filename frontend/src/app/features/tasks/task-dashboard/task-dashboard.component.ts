@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../../core/services/task.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { Task } from '../../../core/models/task.model';
 import { TaskCardComponent } from '../task-card/task-card.component';
 import { TaskFormModalComponent } from '../task-form-modal/task-form-modal.component';
@@ -95,9 +96,9 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
           <app-task-card 
             *ngFor="let task of taskService.tasks()" 
             [task]="task"
-            (onToggle)="taskService.toggleComplete($event).subscribe()"
+            (onToggle)="onToggleTask($event)"
             (onEdit)="openEditModal($event)"
-            (onDelete)="taskService.deleteTask($event).subscribe()">
+            (onDelete)="onDeleteTask($event)">
           </app-task-card>
         </div>
       </main>
@@ -115,6 +116,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
 })
 export class TaskDashboardComponent implements OnInit {
   taskService = inject(TaskService);
+  private toastService = inject(ToastService);
 
   searchQuery = '';
   statusFilter = signal<string>('ALL');
@@ -167,12 +169,30 @@ export class TaskDashboardComponent implements OnInit {
     this.selectedTask.set(null);
   }
 
+  onToggleTask(id: string): void {
+    this.taskService.toggleComplete(id).subscribe(() => {
+      this.toastService.showSuccess('Status Atualizado', 'O status da tarefa foi alterado.');
+    });
+  }
+
+  onDeleteTask(id: string): void {
+    this.taskService.deleteTask(id).subscribe(() => {
+      this.toastService.showSuccess('Tarefa Excluída', 'A tarefa foi removida com sucesso.');
+    });
+  }
+
   onSaveTask(payload: any): void {
     const task = this.selectedTask();
     if (task) {
-      this.taskService.updateTask(task.id, payload).subscribe(() => this.closeModal());
+      this.taskService.updateTask(task.id, payload).subscribe(() => {
+        this.toastService.showSuccess('Tarefa Atualizada', 'As alterações foram salvas com sucesso.');
+        this.closeModal();
+      });
     } else {
-      this.taskService.createTask(payload).subscribe(() => this.closeModal());
+      this.taskService.createTask(payload).subscribe(() => {
+        this.toastService.showSuccess('Tarefa Criada', 'A nova tarefa foi adicionada com sucesso.');
+        this.closeModal();
+      });
     }
   }
 }
