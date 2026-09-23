@@ -11,6 +11,7 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
 import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
+import { TaskDetailModalComponent } from '../task-detail-modal/task-detail-modal.component';
 import { translateMessage } from '../../../core/interceptors/error.interceptor';
 
 @Component({
@@ -21,6 +22,7 @@ import { translateMessage } from '../../../core/interceptors/error.interceptor';
     FormsModule, 
     TaskCardComponent, 
     TaskFormModalComponent, 
+    TaskDetailModalComponent,
     ConfirmModalComponent,
     NavbarComponent, 
     FooterComponent,
@@ -124,6 +126,7 @@ import { translateMessage } from '../../../core/interceptors/error.interceptor';
           <app-task-card 
             *ngFor="let task of taskService.tasks()" 
             [task]="task"
+            (onView)="taskToView.set($event)"
             (onToggle)="onToggleTask($event)"
             (onEdit)="openEditModal($event)"
             (onDelete)="promptDeleteTask($event)">
@@ -147,6 +150,14 @@ import { translateMessage } from '../../../core/interceptors/error.interceptor';
         (onCancel)="taskToDelete.set(null)">
       </app-confirm-modal>
 
+      <app-task-detail-modal
+        *ngIf="taskToView()"
+        [task]="taskToView()!"
+        (onClose)="taskToView.set(null)"
+        (onEdit)="openEditModal($event); taskToView.set(null)"
+        (onDelete)="promptDeleteTask($event); taskToView.set(null)">
+      </app-task-detail-modal>
+
       <app-footer></app-footer>
     </div>
   `
@@ -163,6 +174,7 @@ export class TaskDashboardComponent implements OnInit {
   isFilterApplied = signal<boolean>(false);
   isModalOpen = signal<boolean>(false);
   selectedTask = signal<Task | null>(null);
+  taskToView = signal<Task | null>(null);
   taskToDelete = signal<Task | null>(null);
   modalError = signal<string | null>(null);
 

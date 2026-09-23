@@ -11,12 +11,13 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
   },
   template: `
     <div 
-      class="techx-glass techx-glass-hover rounded-2xl p-5 border border-white/10 flex flex-col justify-between space-y-4 group h-full">
+      (click)="onView.emit(task)"
+      class="techx-glass techx-glass-hover rounded-2xl p-5 border border-white/10 flex flex-col justify-between space-y-4 group h-full cursor-pointer select-none">
       
       <div class="flex items-start justify-between space-x-3">
         <div class="flex items-start space-x-3 flex-1">
           <button 
-            (click)="onToggle.emit(task.id)"
+            (click)="$event.stopPropagation(); onToggle.emit(task.id)"
             class="mt-1 h-6 w-6 rounded-lg border flex items-center justify-center transition-all cursor-pointer shrink-0"
             [ngClass]="task.isCompleted ? 'bg-[#10B981] border-[#10B981] text-[#050505]' : 'border-white/20 hover:border-[#FBB03B] bg-white/5'">
             <svg *ngIf="task.isCompleted" class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,7 +61,7 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
 
         <div class="flex items-center space-x-2 opacity-80 group-hover:opacity-100 transition-opacity">
           <button 
-            (click)="onEdit.emit(task)"
+            (click)="$event.stopPropagation(); onEdit.emit(task)"
             class="p-1.5 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white transition-colors cursor-pointer"
             title="Editar Tarefa">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,7 +69,7 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
             </svg>
           </button>
           <button 
-            (click)="onDelete.emit(task.id)"
+            (click)="$event.stopPropagation(); onDelete.emit(task.id)"
             class="p-1.5 rounded-lg hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors cursor-pointer"
             title="Excluir Tarefa">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,6 +83,7 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
 })
 export class TaskCardComponent {
   @Input({ required: true }) task!: Task;
+  @Output() onView = new EventEmitter<Task>();
   @Output() onToggle = new EventEmitter<string>();
   @Output() onEdit = new EventEmitter<Task>();
   @Output() onDelete = new EventEmitter<string>();
