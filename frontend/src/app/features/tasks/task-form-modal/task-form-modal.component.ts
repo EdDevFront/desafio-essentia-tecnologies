@@ -14,7 +14,13 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
           <h2 class="text-xl font-bold text-white">
             {{ taskToEdit ? 'Editar Tarefa' : 'Nova Tarefa' }}
           </h2>
-          <button (click)="onClose.emit()" class="text-slate-400 hover:text-white text-xl cursor-pointer">✕</button>
+          <button 
+            (click)="onClose.emit()" 
+            class="text-slate-400 hover:text-white p-1 cursor-pointer transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
         </div>
 
         <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="space-y-4">

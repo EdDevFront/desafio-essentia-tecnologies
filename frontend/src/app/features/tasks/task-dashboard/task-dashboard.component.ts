@@ -85,7 +85,6 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
 
         <app-empty-state 
           *ngIf="!taskService.isLoading() && taskService.tasks().length === 0"
-          [icon]="'✨'"
           [title]="'Nenhuma tarefa por aqui!'"
           [description]="'Crie sua primeira tarefa para manter sua produtividade em dia.'"
           [actionLabel]="'+ Criar Tarefa'"
@@ -145,7 +144,7 @@ export class TaskDashboardComponent implements OnInit {
   getFilterBtnClass(status: string): string {
     return this.statusFilter() === status
       ? 'bg-[#FBB03B] text-[#050505]'
-      : 'bg-white/5 text-white hover:bg-white/10';
+      : 'bg-white/5 text-[#b1bbb1] hover:bg-white/10';
   }
 
   getStatusLabel(status: string): string {
