@@ -3,7 +3,7 @@
   class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
   
   <div 
-    (click)="$event.stopPropagation()"
+    (click)="onContainerClick($event)"
     [ngClass]="getMaxWidthClass()"
     class="w-full techx-glass rounded-2xl p-6 border border-white/10 shadow-2xl space-y-5 relative overflow-visible select-none">
     

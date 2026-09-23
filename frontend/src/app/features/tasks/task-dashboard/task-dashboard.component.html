@@ -70,8 +70,8 @@
     *ngIf="taskToView()"
     [task]="taskToView()!"
     (onClose)="taskToView.set(null)"
-    (onEdit)="openEditModal($event); taskToView.set(null)"
-    (onDelete)="promptDeleteTask($event); taskToView.set(null)">
+    (onEdit)="onEditFromDetailModal($event)"
+    (onDelete)="onDeleteFromDetailModal($event)">
   </app-task-detail-modal>
 
   <app-footer></app-footer>

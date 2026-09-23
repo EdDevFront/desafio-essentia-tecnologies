@@ -24,6 +24,10 @@ export class ModalComponent {
     this.onClose.emit();
   }
 
+  onContainerClick(event: MouseEvent): void {
+    event.stopPropagation();
+  }
+
   getMaxWidthClass(): string {
     switch (this.maxWidth) {
       case 'sm':

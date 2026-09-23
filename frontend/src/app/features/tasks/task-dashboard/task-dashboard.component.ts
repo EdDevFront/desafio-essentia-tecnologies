@@ -153,4 +153,14 @@ export class TaskDashboardComponent implements OnInit {
       });
     }
   }
+
+  onEditFromDetailModal(task: Task): void {
+    this.openEditModal(task);
+    this.taskToView.set(null);
+  }
+
+  onDeleteFromDetailModal(taskId: string): void {
+    this.promptDeleteTask(taskId);
+    this.taskToView.set(null);
+  }
 }

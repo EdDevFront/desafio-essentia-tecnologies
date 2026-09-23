@@ -37,4 +37,19 @@ export class TaskCardComponent {
       ? 'text-[#b1bbb1]' 
       : 'text-white/30 italic';
   }
+
+  handleToggle(event: Event): void {
+    event.stopPropagation();
+    this.onToggle.emit(this.task.id);
+  }
+
+  handleEdit(event: Event): void {
+    event.stopPropagation();
+    this.onEdit.emit(this.task);
+  }
+
+  handleDelete(event: Event): void {
+    event.stopPropagation();
+    this.onDelete.emit(this.task.id);
+  }
 }
