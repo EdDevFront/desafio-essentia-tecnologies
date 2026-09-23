@@ -33,6 +33,9 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
                 placeholder="Ex: Edmilson Motta"
                 class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
               />
+              <p *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid" class="text-xs text-red-400 mt-1">
+                O nome completo é obrigatório.
+              </p>
             </div>
 
             <div>
@@ -43,6 +46,9 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
                 placeholder="seu.email@techx.com"
                 class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
               />
+              <p *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid" class="text-xs text-red-400 mt-1">
+                Informe um e-mail válido.
+              </p>
             </div>
 
             <div>
@@ -53,6 +59,9 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
                 placeholder="Mínimo 6 caracteres"
                 class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
               />
+              <p *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" class="text-xs text-red-400 mt-1">
+                A senha deve ter no mínimo 6 caracteres.
+              </p>
             </div>
 
             <button 
@@ -90,7 +99,10 @@ export class RegisterComponent {
   });
 
   onSubmit(): void {
-    if (this.registerForm.invalid) return;
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
     this.isLoading.set(true);
 
     const { name, email, password } = this.registerForm.value;

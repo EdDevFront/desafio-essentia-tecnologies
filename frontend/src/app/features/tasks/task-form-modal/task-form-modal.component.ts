@@ -32,6 +32,9 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
               placeholder="Ex: Implementar testes unitários"
               class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
             />
+            <p *ngIf="taskForm.get('title')?.touched && taskForm.get('title')?.invalid" class="text-xs text-red-400 mt-1">
+              O título da tarefa é obrigatório.
+            </p>
           </div>
 
           <div>
@@ -125,7 +128,10 @@ export class TaskFormModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.taskForm.invalid) return;
+    if (this.taskForm.invalid) {
+      this.taskForm.markAllAsTouched();
+      return;
+    }
     this.onSave.emit(this.taskForm.value);
   }
 }
