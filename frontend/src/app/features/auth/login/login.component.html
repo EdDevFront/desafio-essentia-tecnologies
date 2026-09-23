@@ -11,41 +11,34 @@
       </div>
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-wider text-[#b1bbb1] mb-2">E-mail</label>
-          <input 
-            type="email" 
-            formControlName="email" 
-            placeholder="seu.email@techx.com"
-            class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
-          />
-          <app-form-error 
-            [show]="!!(loginForm.get('email')?.touched && loginForm.get('email')?.invalid)" 
-            message="E-mail inválido.">
-          </app-form-error>
-        </div>
+        <app-input
+          label="E-mail"
+          type="email"
+          formControlName="email"
+          placeholder="seu.email@techx.com"
+          [showError]="!!(loginForm.get('email')?.touched && loginForm.get('email')?.invalid)"
+          errorMessage="E-mail inválido.">
+        </app-input>
 
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-wider text-[#b1bbb1] mb-2">Senha</label>
-          <input 
-            type="password" 
-            formControlName="password" 
-            placeholder="••••••••"
-            class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
-          />
-          <app-form-error 
-            [show]="!!(loginForm.get('password')?.touched && loginForm.get('password')?.invalid)" 
-            message="A senha é obrigatória.">
-          </app-form-error>
-        </div>
+        <app-input
+          label="Senha"
+          type="password"
+          formControlName="password"
+          placeholder="••••••••"
+          [showError]="!!(loginForm.get('password')?.touched && loginForm.get('password')?.invalid)"
+          errorMessage="A senha é obrigatória.">
+        </app-input>
 
-        <button 
-          type="submit" 
-          [disabled]="loginForm.invalid || isLoading()"
-          class="w-full techx-btn-pill py-3 text-base font-bold shadow-lg shadow-[#DC8016]/20 disabled:opacity-50 cursor-pointer">
-          <span *ngIf="!isLoading()">Entrar na Conta</span>
-          <span *ngIf="isLoading()">Carregando...</span>
-        </button>
+        <app-button
+          type="submit"
+          variant="primary"
+          size="lg"
+          [disabled]="loginForm.invalid"
+          [loading]="isLoading()"
+          loadingText="Carregando..."
+          customClass="w-full mt-4">
+          Entrar na Conta
+        </app-button>
       </form>
 
       <p class="text-center text-sm text-[#b1bbb1] mt-8">

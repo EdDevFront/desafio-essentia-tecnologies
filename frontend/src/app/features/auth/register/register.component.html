@@ -5,61 +5,49 @@
     <div class="w-full max-w-md techx-glass rounded-2xl p-8 border border-white/10 shadow-2xl relative overflow-hidden">
       <div class="absolute -top-24 -left-24 w-48 h-48 bg-[#FBB03B]/20 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div class="text-center mb-8">
-        <h1 class="text-2xl font-bold tracking-tight">Criar uma Nova Conta</h1>
-        <p class="text-sm text-[#b1bbb1] mt-2">Cadastre-se para acessar o gerenciador de tarefas TechX</p>
+      <div class="text-[#b1bbb1] mb-8 text-center">
+        <h1 class="text-2xl font-bold tracking-tight text-white">Criar uma Nova Conta</h1>
+        <p class="text-sm mt-2">Cadastre-se para acessar o gerenciador de tarefas TechX</p>
       </div>
 
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-wider text-[#b1bbb1] mb-2">Nome Completo</label>
-          <input 
-            type="text" 
-            formControlName="name" 
-            placeholder="Ex: Edmilson Motta"
-            class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
-          />
-          <app-form-error 
-            [show]="!!(registerForm.get('name')?.touched && registerForm.get('name')?.invalid)" 
-            message="O nome completo é obrigatório.">
-          </app-form-error>
-        </div>
+        <app-input
+          label="Nome Completo"
+          type="text"
+          formControlName="name"
+          placeholder="Ex: Edmilson Motta"
+          [showError]="!!(registerForm.get('name')?.touched && registerForm.get('name')?.invalid)"
+          errorMessage="O nome completo é obrigatório.">
+        </app-input>
 
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-wider text-[#b1bbb1] mb-2">E-mail</label>
-          <input 
-            type="email" 
-            formControlName="email" 
-            placeholder="seu.email@techx.com"
-            class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
-          />
-          <app-form-error 
-            [show]="!!(registerForm.get('email')?.touched && registerForm.get('email')?.invalid)" 
-            message="Informe um e-mail válido.">
-          </app-form-error>
-        </div>
+        <app-input
+          label="E-mail"
+          type="email"
+          formControlName="email"
+          placeholder="seu.email@techx.com"
+          [showError]="!!(registerForm.get('email')?.touched && registerForm.get('email')?.invalid)"
+          errorMessage="Informe um e-mail válido.">
+        </app-input>
 
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-wider text-[#b1bbb1] mb-2">Senha</label>
-          <input 
-            type="password" 
-            formControlName="password" 
-            placeholder="Mínimo 6 caracteres"
-            class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-[#FBB03B] transition-colors"
-          />
-          <app-form-error 
-            [show]="!!(registerForm.get('password')?.touched && registerForm.get('password')?.invalid)" 
-            message="A senha deve ter no mínimo 6 caracteres.">
-          </app-form-error>
-        </div>
+        <app-input
+          label="Senha"
+          type="password"
+          formControlName="password"
+          placeholder="Mínimo 6 caracteres"
+          [showError]="!!(registerForm.get('password')?.touched && registerForm.get('password')?.invalid)"
+          errorMessage="A senha deve ter no mínimo 6 caracteres.">
+        </app-input>
 
-        <button 
-          type="submit" 
-          [disabled]="registerForm.invalid || isLoading()"
-          class="w-full techx-btn-pill py-3 text-base font-bold shadow-lg shadow-[#DC8016]/20 disabled:opacity-50 cursor-pointer mt-4">
-          <span *ngIf="!isLoading()">Criar Conta</span>
-          <span *ngIf="isLoading()">Criando conta...</span>
-        </button>
+        <app-button
+          type="submit"
+          variant="primary"
+          size="lg"
+          [disabled]="registerForm.invalid"
+          [loading]="isLoading()"
+          loadingText="Criando conta..."
+          customClass="w-full mt-4">
+          Criar Conta
+        </app-button>
       </form>
 
       <p class="text-center text-sm text-[#b1bbb1] mt-8">

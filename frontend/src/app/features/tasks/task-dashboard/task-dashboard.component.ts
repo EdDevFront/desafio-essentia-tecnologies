@@ -14,6 +14,8 @@ import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/
 import { TaskDetailModalComponent } from '../task-detail-modal/task-detail-modal.component';
 import { translateMessage } from '../../../core/interceptors/error.interceptor';
 
+import { ButtonComponent } from '../../../shared/components/button/button.component';
+
 @Component({
   selector: 'app-task-dashboard',
   standalone: true,
@@ -27,7 +29,8 @@ import { translateMessage } from '../../../core/interceptors/error.interceptor';
     NavbarComponent, 
     FooterComponent,
     LoadingSkeletonComponent,
-    EmptyStateComponent
+    EmptyStateComponent,
+    ButtonComponent
   ],
   templateUrl: './task-dashboard.component.html'
 })

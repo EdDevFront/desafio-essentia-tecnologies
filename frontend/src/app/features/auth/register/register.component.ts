@@ -6,13 +6,21 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
-
-import { FormErrorComponent } from '../../../shared/components/form-error/form-error.component';
+import { InputComponent } from '../../../shared/components/input/input.component';
+import { ButtonComponent } from '../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, NavbarComponent, FooterComponent, FormErrorComponent],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    RouterLink, 
+    NavbarComponent, 
+    FooterComponent, 
+    InputComponent, 
+    ButtonComponent
+  ],
   templateUrl: './register.component.html'
 })
 export class RegisterComponent {

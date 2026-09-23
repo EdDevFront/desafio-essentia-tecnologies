@@ -5,13 +5,24 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
 import { DatepickerComponent } from '../../../shared/components/datepicker/datepicker.component';
 import { SelectComponent } from '../../../shared/components/select/select.component';
 import { PRESET_CATEGORIES, PRIORITY_OPTIONS, CATEGORY_OPTIONS } from '../../../core/constants/task.constants';
-
+import { ModalComponent } from '../../../shared/components/modal/modal.component';
+import { InputComponent } from '../../../shared/components/input/input.component';
+import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { FormErrorComponent } from '../../../shared/components/form-error/form-error.component';
 
 @Component({
   selector: 'app-task-form-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatepickerComponent, SelectComponent, FormErrorComponent],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    DatepickerComponent, 
+    SelectComponent, 
+    ModalComponent, 
+    InputComponent, 
+    ButtonComponent,
+    FormErrorComponent
+  ],
   templateUrl: './task-form-modal.component.html'
 })
 export class TaskFormModalComponent implements OnInit {

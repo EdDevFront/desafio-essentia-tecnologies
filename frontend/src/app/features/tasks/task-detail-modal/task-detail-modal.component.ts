@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Task } from '../../../core/models/task.model';
 import { PriorityLabelPipe } from '../../../shared/pipes/priority-label.pipe';
 import { PriorityBadgePipe } from '../../../shared/pipes/priority-badge.pipe';
+import { ModalComponent } from '../../../shared/components/modal/modal.component';
+import { ButtonComponent } from '../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-task-detail-modal',
   standalone: true,
-  imports: [CommonModule, PriorityLabelPipe, PriorityBadgePipe],
+  imports: [CommonModule, PriorityLabelPipe, PriorityBadgePipe, ModalComponent, ButtonComponent],
   templateUrl: './task-detail-modal.component.html'
 })
 export class TaskDetailModalComponent {

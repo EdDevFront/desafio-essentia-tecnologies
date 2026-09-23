@@ -1,0 +1,26 @@
+<div 
+  (click)="onBackdropClick($event)"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+  
+  <div 
+    (click)="$event.stopPropagation()"
+    [ngClass]="getMaxWidthClass()"
+    class="w-full techx-glass rounded-2xl p-6 border border-white/10 shadow-2xl space-y-5 relative overflow-visible select-none">
+    
+    <div *ngIf="title" class="flex items-center justify-between border-b border-white/10 pb-3">
+      <h2 class="text-xl font-bold text-white leading-snug">
+        {{ title }}
+      </h2>
+      <button 
+        (click)="onClose.emit()" 
+        class="text-slate-400 hover:text-white p-1 cursor-pointer transition-colors rounded-lg hover:bg-white/10"
+        title="Fechar modal">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <ng-content></ng-content>
+  </div>
+</div>
