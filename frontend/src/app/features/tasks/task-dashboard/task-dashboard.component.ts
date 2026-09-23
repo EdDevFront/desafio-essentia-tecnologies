@@ -10,6 +10,7 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar.compon
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
 import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import { translateMessage } from '../../../core/interceptors/error.interceptor';
 
 @Component({
   selector: 'app-task-dashboard',
@@ -195,8 +196,8 @@ export class TaskDashboardComponent implements OnInit {
           this.closeModal();
         },
         error: (err) => {
-          const msg = err?.error?.message || 'Ocorreu um erro ao atualizar a tarefa.';
-          this.modalError.set(Array.isArray(msg) ? msg.join(', ') : msg);
+          const msg = translateMessage(err?.error?.message);
+          this.modalError.set(msg);
         }
       });
     } else {
@@ -206,8 +207,8 @@ export class TaskDashboardComponent implements OnInit {
           this.closeModal();
         },
         error: (err) => {
-          const msg = err?.error?.message || 'Ocorreu um erro ao criar a tarefa.';
-          this.modalError.set(Array.isArray(msg) ? msg.join(', ') : msg);
+          const msg = translateMessage(err?.error?.message);
+          this.modalError.set(msg);
         }
       });
     }

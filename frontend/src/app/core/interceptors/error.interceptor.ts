@@ -12,15 +12,38 @@ const ERROR_TRANSLATIONS: Record<string, string> = {
   'Internal Server Error': 'Erro interno no servidor. Tente novamente mais tarde.',
   'email must be an email': 'O campo e-mail deve ser um endereço de e-mail válido.',
   'password must be longer than or equal to 6 characters': 'A senha deve ter no mínimo 6 caracteres.',
-  'title should not be empty': 'O título é obrigatório.',
+  'title should not be empty': 'O título da tarefa é obrigatório.',
+  'dueDate must be a valid ISO 8601 date string': 'A data de entrega informada é inválida.',
+  'dueDate must be a ISO8601 formatted date': 'A data de entrega informada é inválida.'
 };
 
-function translateMessage(rawMessage: any): string {
+function translateSingleMessage(msg: string): string {
+  if (ERROR_TRANSLATIONS[msg]) return ERROR_TRANSLATIONS[msg];
+
+  if (typeof msg === 'string') {
+    if (msg.includes('dueDate') || msg.includes('ISO 8601') || msg.includes('date string')) {
+      return 'A data de entrega informada é inválida.';
+    }
+    if (msg.includes('title')) {
+      return 'O título da tarefa é obrigatório.';
+    }
+    if (msg.includes('email')) {
+      return 'O e-mail informado é inválido.';
+    }
+    if (msg.includes('password')) {
+      return 'A senha não atende aos requisitos mínimos.';
+    }
+  }
+
+  return msg || 'Ocorreu um erro inesperado na requisição.';
+}
+
+export function translateMessage(rawMessage: any): string {
   if (!rawMessage) return 'Ocorreu um erro inesperado na requisição.';
   if (Array.isArray(rawMessage)) {
-    return rawMessage.map(msg => ERROR_TRANSLATIONS[msg] || msg).join(', ');
+    return rawMessage.map(msg => translateSingleMessage(msg)).join(', ');
   }
-  return ERROR_TRANSLATIONS[rawMessage] || rawMessage;
+  return translateSingleMessage(rawMessage);
 }
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {

@@ -140,6 +140,10 @@ export class TaskFormModalComponent implements OnInit {
       this.taskForm.markAllAsTouched();
       return;
     }
-    this.onSave.emit(this.taskForm.value);
+    const val: any = { ...this.taskForm.value };
+    if (!val.dueDate || typeof val.dueDate !== 'string' || val.dueDate.trim() === '') {
+      delete val.dueDate;
+    }
+    this.onSave.emit(val);
   }
 }
