@@ -22,8 +22,13 @@ import { AuthService } from '../../../core/services/auth.service';
           </div>
         </div>
 
-        <div class="flex items-center space-x-4" *ngIf="authService.currentUser(); else guestMenu">
-          <div class="hidden sm:flex items-center space-x-3 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+        <div class="flex items-center space-x-4" *ngIf="authService.isAuthenticated(); else guestMenu">
+          <div *ngIf="authService.isLoadingProfile()" class="hidden sm:flex items-center space-x-3 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 animate-pulse">
+            <div class="w-7 h-7 rounded-full bg-white/20"></div>
+            <div class="h-4 w-24 bg-white/20 rounded"></div>
+          </div>
+
+          <div *ngIf="!authService.isLoadingProfile() && authService.currentUser()" class="hidden sm:flex items-center space-x-3 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
             <div class="w-7 h-7 rounded-full bg-gradient-to-r from-[#FBB03B] to-[#DC8016] text-[#050505] flex items-center justify-center font-bold text-xs">
               {{ getInitials(authService.currentUser()?.name) }}
             </div>
@@ -39,7 +44,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
         <ng-template #guestMenu>
           <div class="flex items-center space-x-3">
-            <a routerLink="/login" class="text-sm font-semibold text-slate-300 hover:text-white transition-colors">Entrar</a>
+            <a routerLink="/login" class="text-sm font-semibold text-slate-[#b1bbb1] hover:text-white transition-colors">Entrar</a>
             <a routerLink="/register" class="techx-btn-pill px-5 py-2 text-sm font-semibold">Cadastrar</a>
           </div>
         </ng-template>

@@ -8,12 +8,31 @@ import { User, AuthResponse, LoginRequest, RegisterRequest } from '../models/use
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000/api/auth';
-  
-  currentUser = signal<User | null>(this.getStoredUser());
-  token = signal<string | null>(localStorage.getItem('techx_token'));
-  isAuthenticated = computed(() => !!this.currentUser());
 
-  constructor(private http: HttpClient) {}
+  currentUser = signal<User | null>(null);
+  token = signal<string | null>(localStorage.getItem('techx_token'));
+  isLoadingProfile = signal<boolean>(false);
+  isAuthenticated = computed(() => !!this.token());
+
+  constructor(private http: HttpClient) {
+    if (this.token()) {
+      this.fetchProfile();
+    }
+  }
+
+  fetchProfile(): void {
+    this.isLoadingProfile.set(true);
+    this.http.get<User>(`${this.apiUrl}/me`).subscribe({
+      next: (user) => {
+        this.currentUser.set(user);
+        this.isLoadingProfile.set(false);
+      },
+      error: () => {
+        this.logout();
+        this.isLoadingProfile.set(false);
+      }
+    });
+  }
 
   register(data: RegisterRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data).pipe(
@@ -36,13 +55,7 @@ export class AuthService {
 
   private handleAuthSuccess(res: AuthResponse): void {
     localStorage.setItem('techx_token', res.accessToken);
-    localStorage.setItem('techx_user', JSON.stringify(res.user));
-    this.currentUser.set(res.user);
     this.token.set(res.accessToken);
-  }
-
-  private getStoredUser(): User | null {
-    const raw = localStorage.getItem('techx_user');
-    return raw ? JSON.parse(raw) : null;
+    this.currentUser.set(res.user);
   }
 }
