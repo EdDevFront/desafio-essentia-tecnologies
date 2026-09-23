@@ -213,14 +213,14 @@ export class TaskDashboardComponent implements OnInit {
         'Status Atualizado', 
         `A tarefa foi marcada como "${targetStatus}".`
       );
-      this.refreshCurrentList();
+      this.clearFilters();
     });
   }
 
   onDeleteTask(id: string): void {
     this.taskService.deleteTask(id).subscribe(() => {
       this.toastService.showSuccess('Tarefa Excluída', 'A tarefa foi removida com sucesso.');
-      this.refreshCurrentList();
+      this.clearFilters();
     });
   }
 
@@ -232,7 +232,7 @@ export class TaskDashboardComponent implements OnInit {
         next: () => {
           this.toastService.showSuccess('Tarefa Atualizada', 'As alterações foram salvas com sucesso.');
           this.closeModal();
-          this.refreshCurrentList();
+          this.clearFilters();
         },
         error: (err) => {
           const msg = translateMessage(err?.error?.message);
@@ -244,7 +244,7 @@ export class TaskDashboardComponent implements OnInit {
         next: () => {
           this.toastService.showSuccess('Tarefa Criada', 'A nova tarefa foi adicionada com sucesso.');
           this.closeModal();
-          this.refreshCurrentList();
+          this.clearFilters();
         },
         error: (err) => {
           const msg = translateMessage(err?.error?.message);
