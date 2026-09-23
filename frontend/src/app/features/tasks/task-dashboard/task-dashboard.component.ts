@@ -148,6 +148,8 @@ export class TaskDashboardComponent implements OnInit {
   searchQuery = '';
   statusFilter = 'ALL';
   
+  private lastAppliedFilters: { search?: string; isCompleted?: string } = {};
+
   isFilterApplied = signal<boolean>(false);
   isModalOpen = signal<boolean>(false);
   selectedTask = signal<Task | null>(null);
@@ -163,16 +165,25 @@ export class TaskDashboardComponent implements OnInit {
   }
 
   applyFilters(): void {
-    const isApplied = this.searchQuery.trim() !== '' || this.statusFilter !== 'ALL';
+    const search = this.searchQuery.trim();
+    const isCompleted = this.statusFilter;
+    const isApplied = search !== '' || isCompleted !== 'ALL';
+
+    this.lastAppliedFilters = { search, isCompleted };
     this.isFilterApplied.set(isApplied);
-    this.taskService.loadTasks({ search: this.searchQuery.trim(), isCompleted: this.statusFilter });
+    this.taskService.loadTasks(this.lastAppliedFilters);
   }
 
   clearFilters(): void {
     this.searchQuery = '';
     this.statusFilter = 'ALL';
+    this.lastAppliedFilters = {};
     this.isFilterApplied.set(false);
     this.taskService.loadTasks();
+  }
+
+  refreshCurrentList(): void {
+    this.taskService.loadTasks(this.lastAppliedFilters);
   }
 
   openCreateModal(): void {
@@ -202,14 +213,14 @@ export class TaskDashboardComponent implements OnInit {
         'Status Atualizado', 
         `A tarefa foi marcada como "${targetStatus}".`
       );
-      this.applyFilters();
+      this.refreshCurrentList();
     });
   }
 
   onDeleteTask(id: string): void {
     this.taskService.deleteTask(id).subscribe(() => {
       this.toastService.showSuccess('Tarefa Excluída', 'A tarefa foi removida com sucesso.');
-      this.applyFilters();
+      this.refreshCurrentList();
     });
   }
 
@@ -221,7 +232,7 @@ export class TaskDashboardComponent implements OnInit {
         next: () => {
           this.toastService.showSuccess('Tarefa Atualizada', 'As alterações foram salvas com sucesso.');
           this.closeModal();
-          this.applyFilters();
+          this.refreshCurrentList();
         },
         error: (err) => {
           const msg = translateMessage(err?.error?.message);
@@ -233,7 +244,7 @@ export class TaskDashboardComponent implements OnInit {
         next: () => {
           this.toastService.showSuccess('Tarefa Criada', 'A nova tarefa foi adicionada com sucesso.');
           this.closeModal();
-          this.applyFilters();
+          this.refreshCurrentList();
         },
         error: (err) => {
           const msg = translateMessage(err?.error?.message);
