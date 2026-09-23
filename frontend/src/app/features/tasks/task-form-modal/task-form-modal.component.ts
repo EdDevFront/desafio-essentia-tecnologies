@@ -2,11 +2,12 @@ import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Task, TaskPriority } from '../../../core/models/task.model';
+import { DatepickerComponent } from '../../../shared/components/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-task-form-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DatepickerComponent],
   template: `
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
       <div class="w-full max-w-lg techx-glass rounded-2xl p-6 border border-white/10 shadow-2xl space-y-5 relative overflow-hidden">
@@ -96,11 +97,7 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
 
           <div>
             <label class="block text-xs font-semibold uppercase tracking-wider text-[#b1bbb1] mb-2">Data de Entrega *</label>
-            <input 
-              type="date" 
-              formControlName="dueDate" 
-              class="w-full px-4 py-2.5 rounded-xl techx-date-input text-white"
-            />
+            <app-datepicker formControlName="dueDate" placeholder="dd/mm/aaaa"></app-datepicker>
             <p *ngIf="taskForm.get('dueDate')?.touched && taskForm.get('dueDate')?.invalid" class="text-xs text-red-400 mt-1">
               A data de entrega é obrigatória.
             </p>
