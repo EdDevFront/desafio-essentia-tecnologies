@@ -1,26 +1,8 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { MongooseModuleOptions } from '@nestjs/mongoose';
 
-export function getDatabaseConfig(): TypeOrmModuleOptions {
-  const isProd = process.env.NODE_ENV === 'production';
-  const dbType = process.env.DB_TYPE || 'sqlite';
-
-  if (dbType === 'mysql') {
-    return {
-      type: 'mysql',
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '3306', 10),
-      username: process.env.DB_USER || 'techx_user',
-      password: process.env.DB_PASSWORD || 'techx_password',
-      database: process.env.DB_NAME || 'techx_tasks',
-      autoLoadEntities: true,
-      synchronize: !isProd,
-    };
-  }
-
+export function getDatabaseConfig(): MongooseModuleOptions {
+  const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/techx_tasks';
   return {
-    type: 'sqlite',
-    database: process.env.DB_SQLITE_PATH || 'techx_db.sqlite',
-    autoLoadEntities: true,
-    synchronize: true,
+    uri,
   };
 }

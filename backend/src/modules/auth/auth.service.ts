@@ -1,34 +1,34 @@
 import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import { User } from './entities/user.entity';
+import { User, UserDocument } from './schemas/user.schema';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectModel(User.name)
+    private readonly userModel: Model<UserDocument>,
     private readonly jwtService: JwtService,
   ) {}
 
   async register(dto: RegisterDto) {
-    const existingUser = await this.userRepository.findOne({ where: { email: dto.email } });
+    const existingUser = await this.userModel.findOne({ email: dto.email.toLowerCase() });
     if (existingUser) {
       throw new ConflictException('Este e-mail já está cadastrado na plataforma.');
     }
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
-    const user = this.userRepository.create({
+    const createdUser = new this.userModel({
       name: dto.name,
-      email: dto.email,
+      email: dto.email.toLowerCase(),
       password: hashedPassword,
     });
 
-    const savedUser = await this.userRepository.save(user);
+    const savedUser = await createdUser.save();
     const token = this.generateToken(savedUser.id, savedUser.email);
 
     return {
@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const user = await this.userRepository.findOne({ where: { email: dto.email } });
+    const user = await this.userModel.findOne({ email: dto.email.toLowerCase() });
     if (!user || !(await bcrypt.compare(dto.password, user.password || ''))) {
       throw new UnauthorizedException('E-mail ou senha incorretos. Verifique suas credenciais.');
     }
@@ -51,12 +51,11 @@ export class AuthService {
   }
 
   async getProfile(userId: string) {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.userModel.findById(userId);
     if (!user) {
       throw new UnauthorizedException('Perfil de usuário não encontrado.');
     }
-    delete user.password;
-    return user;
+    return user.toJSON();
   }
 
   private generateToken(userId: string, email: string): string {

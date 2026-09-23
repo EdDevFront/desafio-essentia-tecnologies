@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { TaskPriority } from '../entities/task.entity';
+import { TaskPriority } from '../schemas/task.schema';
 
 export class TaskResponseDto {
   @ApiProperty({ example: 'f8c3b1a2-9d4e-4f5a-8b6c-7d8e9f0a1b2c', description: 'Identificador único da tarefa' })

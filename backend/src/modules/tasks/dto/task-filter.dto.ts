@@ -1,6 +1,6 @@
 import { IsOptional, IsString, IsBooleanString, IsEnum } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { TaskPriority } from '../entities/task.entity';
+import { TaskPriority } from '../schemas/task.schema';
 
 export class TaskFilterDto {
   @ApiPropertyOptional({ description: 'Search term for title or description' })

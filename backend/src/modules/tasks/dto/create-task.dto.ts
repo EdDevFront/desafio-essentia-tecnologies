@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsOptional, IsEnum, IsBoolean, IsDateString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { TaskPriority } from '../entities/task.entity';
+import { TaskPriority } from '../schemas/task.schema';
 
 export class CreateTaskDto {
   @ApiProperty({ example: 'Finalizar documentação da API', description: 'Task title' })
