@@ -10,7 +10,7 @@ import { DatepickerComponent } from '../../../shared/components/datepicker/datep
   imports: [CommonModule, ReactiveFormsModule, DatepickerComponent],
   template: `
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-      <div class="w-full max-w-lg techx-glass rounded-2xl p-6 border border-white/10 shadow-2xl space-y-5 relative overflow-hidden">
+      <div class="w-full max-w-lg techx-glass rounded-2xl p-6 border border-white/10 shadow-2xl space-y-5 relative overflow-visible">
         <div class="flex items-center justify-between border-b border-white/10 pb-3">
           <h2 class="text-xl font-bold text-white">
             {{ taskToEdit ? 'Editar Tarefa' : 'Nova Tarefa' }}
