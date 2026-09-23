@@ -175,8 +175,14 @@ export class TaskDashboardComponent implements OnInit {
   }
 
   onToggleTask(id: string): void {
+    const task = this.taskService.tasks().find(t => t.id === id);
+    const targetStatus = task?.isCompleted ? 'Pendente' : 'Concluída';
+
     this.taskService.toggleComplete(id).subscribe(() => {
-      this.toastService.showSuccess('Status Atualizado', 'O status da tarefa foi alterado.');
+      this.toastService.showSuccess(
+        'Status Atualizado', 
+        `A tarefa foi marcada como "${targetStatus}".`
+      );
     });
   }
 
