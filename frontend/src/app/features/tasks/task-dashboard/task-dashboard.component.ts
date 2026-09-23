@@ -105,6 +105,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
       <app-task-form-modal 
         *ngIf="isModalOpen()" 
         [taskToEdit]="selectedTask()"
+        [errorMessage]="modalError()"
         (onClose)="closeModal()"
         (onSave)="onSaveTask($event)">
       </app-task-form-modal>
@@ -122,6 +123,7 @@ export class TaskDashboardComponent implements OnInit {
   filterOptions = ['ALL', 'false', 'true'];
   isModalOpen = signal<boolean>(false);
   selectedTask = signal<Task | null>(null);
+  modalError = signal<string | null>(null);
 
   totalTasks = computed(() => this.taskService.tasks().length);
   completedTasks = computed(() => this.taskService.tasks().filter(t => t.isCompleted).length);
@@ -155,17 +157,20 @@ export class TaskDashboardComponent implements OnInit {
 
   openCreateModal(): void {
     this.selectedTask.set(null);
+    this.modalError.set(null);
     this.isModalOpen.set(true);
   }
 
   openEditModal(task: Task): void {
     this.selectedTask.set(task);
+    this.modalError.set(null);
     this.isModalOpen.set(true);
   }
 
   closeModal(): void {
     this.isModalOpen.set(false);
     this.selectedTask.set(null);
+    this.modalError.set(null);
   }
 
   onToggleTask(id: string): void {
@@ -181,16 +186,29 @@ export class TaskDashboardComponent implements OnInit {
   }
 
   onSaveTask(payload: any): void {
+    this.modalError.set(null);
     const task = this.selectedTask();
     if (task) {
-      this.taskService.updateTask(task.id, payload).subscribe(() => {
-        this.toastService.showSuccess('Tarefa Atualizada', 'As alterações foram salvas com sucesso.');
-        this.closeModal();
+      this.taskService.updateTask(task.id, payload).subscribe({
+        next: () => {
+          this.toastService.showSuccess('Tarefa Atualizada', 'As alterações foram salvas com sucesso.');
+          this.closeModal();
+        },
+        error: (err) => {
+          const msg = err?.error?.message || 'Ocorreu um erro ao atualizar a tarefa.';
+          this.modalError.set(Array.isArray(msg) ? msg.join(', ') : msg);
+        }
       });
     } else {
-      this.taskService.createTask(payload).subscribe(() => {
-        this.toastService.showSuccess('Tarefa Criada', 'A nova tarefa foi adicionada com sucesso.');
-        this.closeModal();
+      this.taskService.createTask(payload).subscribe({
+        next: () => {
+          this.toastService.showSuccess('Tarefa Criada', 'A nova tarefa foi adicionada com sucesso.');
+          this.closeModal();
+        },
+        error: (err) => {
+          const msg = err?.error?.message || 'Ocorreu um erro ao criar a tarefa.';
+          this.modalError.set(Array.isArray(msg) ? msg.join(', ') : msg);
+        }
       });
     }
   }

@@ -23,6 +23,13 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
           </button>
         </div>
 
+        <div *ngIf="errorMessage" class="p-3 rounded-xl bg-[#7f1d1d]/90 border border-red-500/50 text-white text-xs flex items-center justify-center space-x-2 text-center shadow-lg">
+          <svg class="w-4 h-4 text-red-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span class="font-medium">{{ errorMessage }}</span>
+        </div>
+
         <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="space-y-4">
           <div>
             <label class="block text-xs font-semibold uppercase tracking-wider text-[#b1bbb1] mb-2">Título *</label>
@@ -101,6 +108,7 @@ import { Task, TaskPriority } from '../../../core/models/task.model';
 })
 export class TaskFormModalComponent implements OnInit {
   @Input() taskToEdit: Task | null = null;
+  @Input() errorMessage: string | null = null;
   @Output() onClose = new EventEmitter<void>();
   @Output() onSave = new EventEmitter<any>();
 
