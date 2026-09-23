@@ -3,6 +3,8 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { UserProfileDto, AuthResponseDto } from './dto/user-profile.dto';
+import { ErrorResponseDto } from '../../common/dto/error-response.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { GetUser } from './decorators/get-user.decorator';
 
@@ -12,16 +14,22 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  @ApiOperation({ summary: 'Register a new TechX user' })
-  @ApiResponse({ status: 201, description: 'User registered successfully' })
+  @ApiOperation({ summary: 'Cadastrar novo usuário TechX' })
+  @ApiResponse({ status: 201, description: 'Usuário registrado com sucesso', type: AuthResponseDto })
+  @ApiResponse({ status: 400, description: 'Dados de registro inválidos ou incompletos', type: ErrorResponseDto })
+  @ApiResponse({ status: 409, description: 'E-mail já cadastrado na plataforma', type: ErrorResponseDto })
+  @ApiResponse({ status: 500, description: 'Erro interno no servidor', type: ErrorResponseDto })
   register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Login user and obtain JWT token' })
-  @ApiResponse({ status: 200, description: 'User logged in successfully' })
+  @ApiOperation({ summary: 'Autenticar usuário e gerar token JWT' })
+  @ApiResponse({ status: 200, description: 'Login realizado com sucesso', type: AuthResponseDto })
+  @ApiResponse({ status: 400, description: 'Dados de entrada inválidos', type: ErrorResponseDto })
+  @ApiResponse({ status: 401, description: 'Credenciais (e-mail ou senha) inválidas', type: ErrorResponseDto })
+  @ApiResponse({ status: 500, description: 'Erro interno no servidor', type: ErrorResponseDto })
   login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
   }
@@ -29,7 +37,10 @@ export class AuthController {
   @Get('profile')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get current user profile information' })
+  @ApiOperation({ summary: 'Obter dados do perfil do usuário autenticado' })
+  @ApiResponse({ status: 200, description: 'Perfil retornado com sucesso', type: UserProfileDto })
+  @ApiResponse({ status: 401, description: 'Não autorizado - Token ausente, expirado ou inválido', type: ErrorResponseDto })
+  @ApiResponse({ status: 500, description: 'Erro interno no servidor', type: ErrorResponseDto })
   getProfileInfo(@GetUser('id') userId: string) {
     return this.authService.getProfile(userId);
   }
@@ -37,7 +48,10 @@ export class AuthController {
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get current user profile' })
+  @ApiOperation({ summary: 'Obter dados do usuário autenticado (alias /me)' })
+  @ApiResponse({ status: 200, description: 'Perfil retornado com sucesso', type: UserProfileDto })
+  @ApiResponse({ status: 401, description: 'Não autorizado - Token ausente, expirado ou inválido', type: ErrorResponseDto })
+  @ApiResponse({ status: 500, description: 'Erro interno no servidor', type: ErrorResponseDto })
   getProfile(@GetUser('id') userId: string) {
     return this.authService.getProfile(userId);
   }
